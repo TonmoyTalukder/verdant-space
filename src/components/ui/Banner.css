@@ -1,0 +1,37 @@
+.custom-select-container {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+    overflow: hidden;
+    display: inline-block;
+  }
+  
+  .custom-select .ant-select-selector {
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    height: 32px; /* Adjust as needed */
+  }
+  
+  .custom-select .ant-select-selection-item {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+
+  /* Styling for the placeholder text in the Input */
+.custom-input::placeholder {
+    color: #21390ecc; /* Lighten the color to make it stand out */
+    font-size: 16px; /* Increase font size */
+    font-weight: bold; /* Make the placeholder text bold */
+  }
+  
+  /* Styling for the placeholder text in the Select */
+  .custom-select .ant-select-selection-placeholder {
+    color: #21390ecc; /* Lighten the color to make it stand out */
+    font-size: 16px; /* Increase font size */
+    font-weight: bold; /* Make the placeholder text bold */
+  }
+  
+  

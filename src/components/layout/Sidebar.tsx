@@ -31,7 +31,7 @@ const Sidebar = () => {
     <Sider
         breakpoint="lg"
         collapsedWidth="0"
-        style={{ color: "white", backgroundColor: "#5e9245" }}
+        style={{ color: "white", backgroundColor: "#628753" }}
       >
         <div
           style={{
@@ -58,7 +58,7 @@ const Sidebar = () => {
           }}
         >
           <Menu
-            style={{ backgroundColor: "#5e9245" }}
+            style={{ backgroundColor: "#628753" }}
             mode="inline"
             // defaultSelectedKeys={["4"]}
             items={sidebarItems}

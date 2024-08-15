@@ -1,0 +1,47 @@
+.search-tab {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateY(-100%);
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100; /* Ensure it's above other elements */
+  }
+  
+  .search-tab.visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .search-tab-header {
+    background-color: #fff;
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    padding: 0 2.5vw;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .suggestion-box {
+    background-color: #fff;
+    position: fixed;
+    top: 8vh;
+    width: 100vw;
+    min-height: 15vh;
+    padding: 1vh 2.5vw;
+    /* margin-left: -1.8%; */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow-y: auto;
+  }
+  
+  .custom-input::placeholder {
+    color: #21390ecc; /* Lighten the color to make it stand out */
+    font-size: 16px; /* Increase font size */
+    font-weight: bold; /* Make the placeholder text bold */
+  }
+  

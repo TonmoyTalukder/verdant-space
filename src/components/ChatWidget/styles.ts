@@ -4,7 +4,7 @@ export const styles: {
   modalWindow: React.CSSProperties;
 } = {
   chatWidget: {
-    backgroundColor: "#5ec32f",
+    backgroundColor: "#628753",
     paddingLeft: "0.2rem",
     paddingRight: "0.2rem",
     paddingTop: "0.25rem",

@@ -67,12 +67,10 @@ const Navbar = () => {
     <ConfigProvider
       theme={{
         components: {
-          // Layout: {
-          //   /* here is your component tokens */
-          //   headerHeight: 64,
-          // },
           Menu: {
             itemColor: '#ffff',
+            itemHoverColor: '#e3e5b5',
+            horizontalItemHoverColor: '#e3e5b5',
             horizontalItemSelectedColor: '#daa611',
           },
           Button: {
@@ -90,7 +88,7 @@ const Navbar = () => {
           top: 0,
           zIndex: 1, // Ensure the header is on top of other elements
           padding: 0,
-          backgroundColor: "#2f7f4b",
+          backgroundColor: "#21390e",
           // backgroundColor: "#5e9245",
         }}
       >
@@ -111,7 +109,9 @@ const Navbar = () => {
             style={{
               flex: 1,
               minWidth: 0,
-              backgroundColor: "#2f7f4b",
+              backgroundColor: "#21390e",
+              marginLeft: '2%',
+              fontWeight: '900',
             }}
           />
         )}

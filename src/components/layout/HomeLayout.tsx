@@ -5,10 +5,13 @@ import { useEffect, useState } from "react";
 import Notice from "../ui/Notice";
 import Banner from "../ui/Banner";
 import Navbar from "./Navbar";
+import ResponsiveNavbar from "./ResponsiveNavbar";
+import ResponsiveCart from "./ResponsiveCart";
 const { Content, Footer } = Layout;
 
 const HomeLayout = () => {
   const [isFixed, setIsFixed] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,7 +20,6 @@ const HomeLayout = () => {
       const scrollY = window.scrollY;
 
       setIsFixed(contentHeight > windowHeight + scrollY);
-
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -26,19 +28,43 @@ const HomeLayout = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <div id="banner" style={{ border: "0px solid red" }}>
-        <Notice />
-        <Banner />
-      </div>
-      <Navbar/>
+      {isMobile ? (
+        <>
+          <ResponsiveNavbar />
+          <ResponsiveCart />
+        </>
+      ) : (
+        <>
+          <div id="banner" style={{ border: "0px solid red" }}>
+            <Notice />
+            <Banner />
+          </div>
+          <Navbar />
+        </>
+      )}
+
       <Content
         id="content"
         style={{
-          margin: "0 16px 0",
+          margin: "0 1.6% 0",
           minHeight: "calc(100vh - 134px)", // Adjust based on header and footer height
           position: "relative",
+          // border: '2px solid red',
         }}
       >
         <div
