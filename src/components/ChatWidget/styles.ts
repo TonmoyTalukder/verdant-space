@@ -1,10 +1,10 @@
-export const styles: {
+export const styles = (isMobile: boolean): {
   chatWidget: React.CSSProperties;
   chatWidgetText: React.CSSProperties;
   modalWindow: React.CSSProperties;
-} = {
+} => ({
   chatWidget: {
-    backgroundColor: "#628753",
+    backgroundColor:  isMobile ? "#21390e" : "#21390e",
     paddingLeft: "0.2rem",
     paddingRight: "0.2rem",
     paddingTop: "0.25rem",
@@ -18,14 +18,13 @@ export const styles: {
   },
 
   modalWindow: {
-    width: "15vw",
+    width: isMobile ? "35vw" : "15vw",
     height: "30vh",
-    // maxWidth: "calc(100% - 48px)",
-    // maxHeight: "calc(100% - 48px)",
     backgroundColor: "white",
     borderRadius: "12px",
-    border: `2px solid #5ec32f`,
+    border: `2px solid #21390e`,
     overflow: "hidden",
     boxShadow: "0px 0px 16px 6px rgba(0, 0, 0, 0.33)",
+    marginBottom: '3vh',
   },
-};
+});

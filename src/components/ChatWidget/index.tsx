@@ -9,6 +9,7 @@ interface ChatWidgetProps {
 }
 
 const ChatWidget: React.FC<ChatWidgetProps> = ({ isFixed }) => {
+  const isMobile = window.innerWidth <= 768;
   const [hovered, setHovered] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const widgetRef = useRef<HTMLDivElement>(null);
@@ -32,10 +33,10 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ isFixed }) => {
     <div
       ref={widgetRef}
       style={{
-        ...styles.chatWidget,
+        ...styles(isMobile).chatWidget,
         position: isFixed ? "fixed" : "absolute",
         bottom: isFixed ? "3%" : "0",
-        right: isFixed ? "1%" : "0",
+        right: isFixed ? "1.6%" : "1.6%",
         border: hovered ? "1px solid black" : "",
       }}
       onClick={() => setVisible(!visible)}

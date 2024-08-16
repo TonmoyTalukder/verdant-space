@@ -9,13 +9,15 @@ interface ModalWindowProps {
 }
 
 const ModalWindow: React.FC<ModalWindowProps> = ({ visible, isFixed }) => {
+  const isMobile = window.innerWidth <= 768;
+
   return (
     <div
       style={{
-        ...styles.modalWindow,
+        ...styles(isMobile).modalWindow,
         position: isFixed ? "fixed" : "absolute",
         bottom: isFixed ? "8vh" : "5vh",
-        right: isFixed ? "1%" : "0",
+        right: isFixed ? "1.6%" : "1.6%",
         opacity: visible ? "1" : "0",
         visibility: visible ? "visible" : "hidden",
         transition: "opacity 0.3s ease, visibility 0.3s ease",
