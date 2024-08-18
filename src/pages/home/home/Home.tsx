@@ -1,41 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Carousel, Col, Image as AntdImage, Row, Spin } from "antd";
-import MosaicImgGallery from "../../components/MosaicImgGallery";
-import "./Home.css"; // Importing CSS for custom styles
+import "./Home.css"; 
 
-const carouselContainerStyle: React.CSSProperties = {
-  width: "100%",
-  overflow: "hidden",
-  display: "flex",
-  alignItems: "center",
-};
-
-const carouselItemStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  width: "100%",
-  height: "auto",
-};
-
-const imageStyle: React.CSSProperties = {
-  width: "100%",
-  height: "auto",
-  objectFit: "contain",
-};
-
-const buttonColStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  padding: "0 0",
-};
-
-const rowStyle: React.CSSProperties = {
-  backgroundColor: "#cfe8cc",
-  padding: "1rem",
-  marginTop: "-1vh",
-};
+// Importing styles from HomeStyles.ts
+import {
+  carouselContainerStyle,
+  carouselItemStyle,
+  imageStyle,
+  colStyle,
+  rowStyle,
+} from "./HomeStyles"; 
+import MosaicImgGallery from "../../../components/MosaicImgGallery";
 
 // Typing the src parameter as string
 const preloadImage = (src: string): Promise<void> => {
@@ -66,8 +41,8 @@ const Home: React.FC = () => {
     };
 
     loadImages();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Spin
@@ -99,7 +74,7 @@ const Home: React.FC = () => {
 
           <div style={{ ...rowStyle, paddingLeft: "5%", paddingRight: "5%" }}>
             <Row gutter={[16, 16]} style={{ width: "100%" }}>
-              <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
+              <Col xs={12} sm={12} md={6} lg={6} style={colStyle}>
                 <Row justify="start">
                   <Col span={4}>
                     <AntdImage
@@ -116,7 +91,7 @@ const Home: React.FC = () => {
                   </Col>
                 </Row>
               </Col>
-              <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
+              <Col xs={12} sm={12} md={6} lg={6} style={colStyle}>
                 <Row justify="end">
                   <Col span={16} style={{ marginRight: "3%" }}>
                     <div style={{ textAlign: "end" }}>
@@ -133,7 +108,7 @@ const Home: React.FC = () => {
                   </Col>
                 </Row>
               </Col>
-              <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
+              <Col xs={12} sm={12} md={6} lg={6} style={colStyle}>
                 <Row justify="start">
                   <Col span={4}>
                     <AntdImage
@@ -150,7 +125,7 @@ const Home: React.FC = () => {
                   </Col>
                 </Row>
               </Col>
-              <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
+              <Col xs={12} sm={12} md={6} lg={6} style={colStyle}>
                 <Row justify="end">
                   <Col span={16} style={{ marginRight: "3%" }}>
                     <div style={{ textAlign: "end" }}>
