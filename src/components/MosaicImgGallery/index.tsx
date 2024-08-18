@@ -1,38 +1,40 @@
 import PhotoAlbum from "react-photo-album";
 import "react-photo-album/styles.css";
-
 import { generateImagesArray } from "./generateImagesArray";
+import { useEffect, useState } from "react";
+import { photoPaths } from "./photos";
 
-const photoPaths = [
-  "https://nurseryplantsbd.com/wp-content/uploads/2021/09/night-blooming-jasmine-fragrant-cestrum-nocturnum-plant.jpg", 
-
-  "https://nurseryplantsbd.com/wp-content/uploads/2021/05/cycus.jpg", 
-
-  "https://m.media-amazon.com/images/I/71QzoJyITIL._AC_SL1000_.jpg", 
-
-  "https://nurseryplantsbd.com/wp-content/uploads/2021/05/Cycas-Tree_Cycas_%E0%A6%B8%E0%A6%BE%E0%A6%87%E0%A6%95%E0%A6%BE%E0%A6%B8-%E0%A6%97%E0%A6%BE%E0%A6%9B-NurseryplantsBD.Com_.jpg", 
-
-  "https://nurseryplantsbd.com/wp-content/uploads/2022/02/Kokedama-Plants.jpg", 
-
-  "https://nurseryplantsbd.com/wp-content/uploads/2022/04/bonsai-4k-wallpapers-1920-%C3%97-1080-768x432.jpg", 
-
-  "https://nurseryplantsbd.com/wp-content/uploads/2021/07/%E0%A6%98%E0%A7%83%E0%A6%A4%E0%A6%95%E0%A7%81%E0%A6%AE%E0%A6%BE%E0%A6%B0%E0%A7%80.jpg", 
-
-  "https://treesdirect.co.uk/app/uploads/2018/02/Golden-Delicious-Apple-530x450.jpg", 
-
-  "https://nurseryplantsbd.com/wp-content/uploads/2022/02/Conifer-Plants.jpg", 
-  
-  "https://gardengoodsdirect.com/cdn/shop/files/pink-muhly-grass-7852300992576_x560.progressive.jpg?v=1695419172", 
-
-  "https://gardengoodsdirect.com/cdn/shop/files/peace-lily-16086552084522_x560.progressive.jpg?v=1695382629", 
-  
-  "https://nurseryplantsbd.com/wp-content/uploads/2022/02/Cycad-Plants.jpg"];
-
-const photos = generateImagesArray(photoPaths);
+const getRandomImages = (array: string[], num: number): string[] => {
+  const shuffled = array.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, num);
+};
 
 const MosaicImgGallery = () => {
+  const [photos, setPhotos] = useState(generateImagesArray(photoPaths));
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        // For mobile view, randomly select 6 images
+        const selectedImages = getRandomImages(photoPaths, 6);
+        setPhotos(generateImagesArray(selectedImages));
+      } else {
+        // For larger screens, use all images
+        setPhotos(generateImagesArray(photoPaths));
+      }
+    };
+
+    // Run on initial load
+    handleResize();
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
-    <div style={{border:  '2px',borderRadius: '12px', overflow: 'hidden'}}>
+    <div style={{ border: "2px", borderRadius: "12px", overflow: "hidden" }}>
       <PhotoAlbum layout="rows" photos={photos} targetRowHeight={150} />
     </div>
   );
