@@ -1,102 +1,181 @@
-import { Button, Carousel, Col, Image, Row } from "antd";
+import React, { useState, useEffect } from "react";
+import { Carousel, Col, Image as AntdImage, Row, Spin } from "antd";
+import MosaicImgGallery from "../../components/MosaicImgGallery";
+import "./Home.css"; // Importing CSS for custom styles
 
-const carouselStyle: React.CSSProperties = {
-  height: "42vh", // Set the height of the carousel
-  width: "100%", // Ensure it takes full width
-  overflow: "hidden", // Prevent content overflow
+const carouselContainerStyle: React.CSSProperties = {
+  width: "100%",
+  overflow: "hidden",
+  display: "flex",
+  alignItems: "center",
+};
+
+const carouselItemStyle: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  width: "100%",
+  height: "auto",
+};
+
+const imageStyle: React.CSSProperties = {
+  width: "100%",
+  height: "auto",
+  objectFit: "contain",
 };
 
 const buttonColStyle: React.CSSProperties = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: "100%", // Ensure the buttons take the full height of the container
+  padding: "0 0",
 };
 
-const Home = () => {
+const rowStyle: React.CSSProperties = {
+  backgroundColor: "#cfe8cc",
+  padding: "1rem",
+  marginTop: "-1vh",
+};
+
+// Typing the src parameter as string
+const preloadImage = (src: string): Promise<void> => {
+  return new Promise((resolve) => {
+    const img = new window.Image(); // Use window.Image to avoid implicit 'any' type
+    img.src = src;
+    img.onload = () => resolve();
+    img.onerror = () => resolve(); // Resolve on error to prevent blocking
+  });
+};
+
+const Home: React.FC = () => {
+  const [loading, setLoading] = useState(true);
+
+  const images: string[] = [
+    "/Discount Carousel.png",
+    "/Discount Carousel 2.png",
+    "/join.png",
+    "/Delivery.png",
+    "/Shipping.png",
+    "/Support.png",
+  ];
+
+  useEffect(() => {
+    const loadImages = async () => {
+      await Promise.all(images.map((src) => preloadImage(src)));
+      setLoading(false); // All images are loaded
+    };
+
+    loadImages();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
+
   return (
-    <div>
-      <Carousel autoplay style={carouselStyle}>
-        <div
-          style={{
-            ...carouselStyle,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            src="/Discount Carousel.png"
-            preview={false}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover", // Ensures the image covers the carousel slide without exceeding bounds
-            }}
-          />
+    <Spin
+      style={{ marginTop: "5%", color: '#628753' }}
+      spinning={loading}
+      tip="Loading..."
+      className="custom-spin"
+    >
+      {!loading && (
+        <div>
+          <div>
+            <Carousel autoplay style={carouselContainerStyle}>
+              <div style={carouselItemStyle}>
+                <AntdImage
+                  src="/Discount Carousel.png"
+                  preview={false}
+                  style={imageStyle}
+                />
+              </div>
+              <div style={carouselItemStyle}>
+                <AntdImage
+                  src="/Discount Carousel 2.png"
+                  preview={false}
+                  style={imageStyle}
+                />
+              </div>
+            </Carousel>
+          </div>
+
+          <div style={{ ...rowStyle, paddingLeft: "5%", paddingRight: "5%" }}>
+            <Row gutter={[16, 16]} style={{ width: "100%" }}>
+              <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
+                <Row justify="start">
+                  <Col span={4}>
+                    <AntdImage
+                      src="/join.png"
+                      preview={false}
+                      style={imageStyle}
+                    />
+                  </Col>
+                  <Col span={16} style={{ marginLeft: "3%" }}>
+                    <div>
+                      <b>Plants Shop, Nursery Plants & Garden</b>
+                      <p>100K + tree lovers have joined with us.</p>
+                    </div>
+                  </Col>
+                </Row>
+              </Col>
+              <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
+                <Row justify="end">
+                  <Col span={16} style={{ marginRight: "3%" }}>
+                    <div style={{ textAlign: "end" }}>
+                      <b>All Bangladesh Delivery</b>
+                      <p>We allow any courier service in Bangladesh.</p>
+                    </div>
+                  </Col>
+                  <Col span={4}>
+                    <AntdImage
+                      src="/Delivery.png"
+                      preview={false}
+                      style={imageStyle}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
+                <Row justify="start">
+                  <Col span={4}>
+                    <AntdImage
+                      src="/Shipping.png"
+                      preview={false}
+                      style={imageStyle}
+                    />
+                  </Col>
+                  <Col span={16} style={{ marginLeft: "3%" }}>
+                    <div>
+                      <b>Trusted Shipping</b>
+                      <p>Providing trusted shipping with a refund policy.</p>
+                    </div>
+                  </Col>
+                </Row>
+              </Col>
+              <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
+                <Row justify="end">
+                  <Col span={16} style={{ marginRight: "3%" }}>
+                    <div style={{ textAlign: "end" }}>
+                      <b>All time Support</b>
+                      <p>We are supporting to making any garden in your area.</p>
+                    </div>
+                  </Col>
+                  <Col span={4}>
+                    <AntdImage
+                      src="/Support.png"
+                      preview={false}
+                      style={imageStyle}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </div>
+
+          <div style={{ padding: "1vh 10vw" }}>
+            <MosaicImgGallery />
+          </div>
         </div>
-        <div
-          style={{
-            ...carouselStyle,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            src="/Discount Carousel 2.png"
-            preview={false}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover", // Ensures the image covers the carousel slide without exceeding bounds
-            }}
-          />
-        </div>
-      </Carousel>
-      <div style={{ backgroundColor: "#cfe8cc", height: "15vh" }}>
-        <Row
-          gutter={[16, 16]}
-          style={{
-            height: "100%", // Set the height of the Row to ensure it fills the container
-          }}
-        >
-          <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
-            <Button type="primary" style={{ width: "100%" }}>
-              Button 1
-            </Button>
-          </Col>
-          <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
-            <Button type="primary" style={{ width: "100%" }}>
-              Button 2
-            </Button>
-          </Col>
-          <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
-            <Button type="primary" style={{ width: "100%" }}>
-              Button 3
-            </Button>
-          </Col>
-          <Col xs={12} sm={12} md={6} lg={6} style={buttonColStyle}>
-            <Button type="primary" style={{ width: "100%" }}>
-              Button 4
-            </Button>
-          </Col>
-        </Row>
-      </div>
-      {/* <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1>
-      <h1>This is HomeComponent.</h1> */}
-    </div>
+      )}
+    </Spin>
   );
 };
 

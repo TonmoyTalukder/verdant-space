@@ -1,0 +1,10 @@
+/* Home.css */
+
+.custom-spin .ant-spin-dot {
+    color: #628753; /* Change this to any color you prefer */
+  }
+  
+  .custom-spin .ant-spin-dot-item {
+    background-color: #628753; /* The dots inside the spinner */
+  }
+  
