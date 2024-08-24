@@ -5,26 +5,101 @@ import {
   HeartOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { Image, Input, Select, Button, ConfigProvider, Badge } from "antd";
-import type { InputRef } from 'antd';
+import {
+  Image,
+  Input,
+  Select,
+  Button,
+  ConfigProvider,
+  Badge,
+  Rate,
+  Col,
+  Row,
+} from "antd";
+import type { InputRef } from "antd";
 import "./Banner.css";
+import { useSearchProductsQuery } from "../../redux/features/products/productsApi";
+import { TProduct } from "../../types/productTypes";
+import { debounce } from "lodash";
+import { useDispatch } from "react-redux";
+import { setSearchResults } from "../../redux/features/products/productsSlice";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
 const Banner = () => {
   const [searchText, setSearchText] = useState("");
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [suggestionsVisible, setSuggestionsVisible] = useState(false);
   const [suggestionBoxWidth, setSuggestionBoxWidth] = useState(0);
-  
+  const [suggestions, setSuggestions] = useState<TProduct[]>([]);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { data: searchResults } = useSearchProductsQuery(
+    { searchTerm: searchText, type: selectedOption },
+    {
+      skip: !searchText, // Skip query if searchText is empty
+    },
+  );
+
+  const debouncedSearch = useRef(
+    debounce((query: string) => {
+      setSearchText(query);
+    }, 500),
+  ).current;
+
   const inputRef = useRef<InputRef | null>(null);
   const selectRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const suggestionBoxRef = useRef<HTMLDivElement>(null);
 
+  // Filter the search results on client-side for extra safety
+  useEffect(() => {
+    if (searchResults && searchResults.success) {
+      const filteredResults = searchResults.data.filter((product: TProduct) => {
+        // const matchesSearchTerm = product.name
+        //   .toLowerCase()
+        //   .includes(searchText.toLowerCase());
+
+        const matchesSearchTerm =
+          product.name.toLowerCase().includes(searchText.toLowerCase()) ||
+          product.description
+            .toLowerCase()
+            .includes(searchText.toLowerCase()) ||
+          product.type
+            .toLowerCase()
+            .includes(searchText.toLowerCase()) ||
+          product.tags.some((tag) =>
+            tag.toLowerCase().includes(searchText.toLowerCase()),
+          );
+
+        const matchesType = selectedOption
+          ? product.type === selectedOption
+          : true;
+
+        return matchesSearchTerm && matchesType;
+      });
+      setSuggestions(filteredResults);
+      // console.log("Filtered results: ", filteredResults);
+    } else {
+      setSuggestions([]);
+    }
+  }, [searchResults, searchText, selectedOption]);
+
   const handleSearch = () => {
-    console.log("Search Text:", searchText);
-    console.log("Selected Option:", selectedOption);
+    // const finalSearchText = selectedOption
+    //   ? `${searchText} ${selectedOption}`
+    //   : searchText;
+
+    // setSearchText(finalSearchText);
+    // console.log("Search initiated for:", searchText, "and type:", selectedOption);
+
+    // Dispatch search results to the Redux store
+    dispatch(setSearchResults(searchResults));
+    navigate("/shop");
+    console.log("result: ", searchResults);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -61,16 +136,12 @@ const Banner = () => {
       const selectWidth = selectRef.current?.offsetWidth || 0;
       const buttonWidth = buttonRef.current.offsetWidth;
       setSuggestionBoxWidth(inputWidth + selectWidth + buttonWidth);
-      // console.log(inputWidth, ' ', selectWidth, ' ', buttonWidth, ' ', suggestionBoxWidth)
     }
   }, [searchText]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
+    debouncedSearch(e.target.value);
     setSuggestionsVisible(e.target.value.trim() !== "");
-
-    // Log the search text in real-time
-    console.log("Current Search Text:", e.target.value);
   };
 
   return (
@@ -89,7 +160,7 @@ const Banner = () => {
           width: "15%",
           height: "15vh",
           overflow: "hidden",
-          alignContent: 'center',
+          alignContent: "center",
         }}
       >
         <Image
@@ -131,22 +202,25 @@ const Banner = () => {
             borderTopRightRadius: "0px",
           }}
         />
-        <div
-          className="custom-select-container"
-          ref={selectRef}
-        >
+        <div className="custom-select-container" ref={selectRef}>
           <Select
             placeholder="Category"
-            onChange={(value) => setSelectedOption(value)}
+            // defaultValue="All"
+            onChange={(value) =>
+              setSelectedOption(value === "All" ? null : value)
+            }
             style={{
-              width: "100%",
+              width: "8vw",
               marginRight: "0vw",
             }}
             className="custom-select"
           >
-            <Option value="Option1">Option 1</Option>
-            <Option value="Option2">Option 2</Option>
-            <Option value="Option3">Option 3</Option>
+            <Option value="All">All Categories</Option>
+            <Option value="Fruit">Fruit</Option>
+            <Option value="Flower">Flower</Option>
+            <Option value="Home Decor Plant">Home Decor Plant</Option>
+            <Option value="Wood Plant">Wood Plant</Option>
+            <Option value="Herb">Herb</Option>
           </Select>
         </div>
         <ConfigProvider
@@ -194,19 +268,88 @@ const Banner = () => {
               padding: "1vh 2vw",
               textAlign: "center",
               borderRadius: "8px 8px 8px 8px",
-              minHeight: '15vh',
+              minHeight: "15vh",
+              // display: "flex",
+              justifyContent: "center",
+              alignContent: "center",
             }}
           >
-            <p style={{ color: "#888", margin: 0 }}>
-              {searchText.trim() === ""
-                ? "Nothing found"
-                : "Suggestions will appear here..."}
-            </p>
+            {suggestions.length === 0 ? (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "13vh",
+                }}
+              >
+                <p style={{ color: "#888", margin: 0, textAlign: "center" }}>
+                  {searchText.trim() === ""
+                    ? "Start typing to see suggestions..."
+                    : "No suggestions found"}
+                </p>
+              </div>
+            ) : (
+              suggestions.map((product) => (
+                <Row
+                  key={product._id}
+                  style={{
+                    marginBottom: "10px",
+                    display: "flex",
+                    alignContent: "center",
+                    padding: "10px",
+                    backgroundColor: "#f0f8ef",
+                    border: "2px",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <Col
+                    span={24}
+                    style={{
+                      display: "flex",
+                      justifyContent: "left",
+                    }}
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      style={{
+                        width: "6vw",
+                        height: "6vh",
+                        marginRight: "2vw",
+                      }}
+                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                        marginLeft: "2vw",
+                        marginRight: "1vw",
+                      }}
+                    >
+                      <div>
+                        <b>{product.name}</b>&#160;&#160;&#160;
+                        <span>{product.type}</span>
+                        <p style={{ textAlign: "left" }}>
+                          Price: ৳ {product.price}
+                        </p>
+                      </div>
+                      <div style={{ textAlign: "center" }}>
+                        <Rate allowHalf disabled value={product.rating} />
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              ))
+            )}
           </div>
         )}
       </div>
       {/* User, Wishlist, and Cart Icons */}
-      <div style={{ display: "flex", alignItems: "center", marginLeft: "auto" }}>
+      <div
+        style={{ display: "flex", alignItems: "center", marginLeft: "auto" }}
+      >
         <ConfigProvider
           theme={{
             components: {
@@ -224,8 +367,14 @@ const Banner = () => {
             },
           }}
         >
-          <Button style={{ marginRight: "5%" }} icon={<UserOutlined style={{ fontSize: '1.7em' }} />} />
-          <Button style={{ marginRight: "8%" }} icon={<HeartOutlined style={{ fontSize: '1.7em' }} />} />
+          <Button
+            style={{ marginRight: "5%" }}
+            icon={<UserOutlined style={{ fontSize: "1.7em" }} />}
+          />
+          <Button
+            style={{ marginRight: "8%" }}
+            icon={<HeartOutlined style={{ fontSize: "1.7em" }} />}
+          />
         </ConfigProvider>
         <ConfigProvider
           theme={{

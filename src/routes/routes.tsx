@@ -7,7 +7,6 @@ import { adminPaths } from "./admin.routes";
 import { routeGenerator } from "../utils/routesGenerator";
 import { userPaths } from "./user.routes";
 import { homePaths } from "./home.routes";
-import Product from "../pages/common/Product";
 
 const router = createBrowserRouter([
     {
@@ -25,10 +24,10 @@ const router = createBrowserRouter([
         element: <UserLayout/>,
         children: routeGenerator(userPaths),
     },
-    {
-        path: '/product',
-        element: <Product/>,
-    },
+    // {
+    //     path: '/shop/:productId',
+    //     element: <Product/>,
+    // },
     {
         path: '/login',
         element: <Login/>,

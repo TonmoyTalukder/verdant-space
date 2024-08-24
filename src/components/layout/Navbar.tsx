@@ -1,45 +1,41 @@
-import { DownOutlined } from "@ant-design/icons";
-import { Button, ConfigProvider, Dropdown, Menu, MenuProps, Space } from "antd";
+import React, { useEffect, useState } from "react";
+import { ConfigProvider, Menu, MenuProps } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const items: MenuProps["items"] = [
   {
-    key: "Home",
-    label: <NavLink to="/home"> Home </NavLink>,
+    key: "/home",
+    label: <NavLink to="/home">Home</NavLink>,
   },
   {
-    key: "Shop",
+    key: "/shop",
     label: <NavLink to="/shop">Shop</NavLink>,
   },
   {
-    key: "Supply Us",
+    key: "/supply",
     label: <NavLink to="/supply">Supply Us</NavLink>,
   },
   {
-    key: "Article",
+    key: "/articles",
     label: <NavLink to="/articles">Articles</NavLink>,
   },
   {
-    key: "FAQ",
+    key: "/faq",
     label: <NavLink to="/faq">FAQ</NavLink>,
   },
 ];
+
 const Navbar = () => {
   const [isBannerFixed, setIsBannerFixed] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
-      const bannerHeight = document.getElementById("banner")!.offsetHeight;
+      const bannerHeight = document.getElementById("banner")?.offsetHeight || 0;
       const scrollY = window.scrollY;
 
-      if (scrollY > bannerHeight) {
-        setIsBannerFixed(true);
-      } else {
-        setIsBannerFixed(false);
-      }
+      setIsBannerFixed(scrollY > bannerHeight);
     };
 
     handleScroll();
@@ -50,33 +46,20 @@ const Navbar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
     <ConfigProvider
       theme={{
         components: {
           Menu: {
-            itemColor: '#ffff',
-            itemHoverColor: '#e3e5b5',
-            horizontalItemHoverColor: '#e3e5b5',
-            horizontalItemSelectedColor: '#daa611',
+            itemColor: "#ffff",
+            itemHoverColor: "#e3e5b5",
+            horizontalItemHoverColor: "#e3e5b5",
+            horizontalItemSelectedColor: "#daa611",
           },
           Button: {
-            defaultBg: '#dfe2d200',
-            defaultBorderColor: '#dfe2d200',
-            defaultColor: '#fff',
+            defaultBg: "#dfe2d200",
+            defaultBorderColor: "#dfe2d200",
+            defaultColor: "#fff",
           },
         },
       }}
@@ -86,35 +69,23 @@ const Navbar = () => {
           position: isBannerFixed ? "fixed" : "relative",
           width: "100%",
           top: 0,
-          zIndex: 1, // Ensure the header is on top of other elements
+          zIndex: 1,
           padding: 0,
           backgroundColor: "#21390e",
-          // backgroundColor: "#5e9245",
         }}
       >
-        {isMobile ? (
-          <Dropdown menu={{ items }} trigger={["click"]}>
-            <Button type="default" style={{ marginLeft: 18 }} onClick={(e) => e.preventDefault()}>
-              <Space>
-                Menu
-                <DownOutlined />
-              </Space>
-            </Button>
-          </Dropdown>
-        ) : (
-          <Menu
-            mode="horizontal"
-            // defaultSelectedKeys={["2"]}
-            items={items}
-            style={{
-              flex: 1,
-              minWidth: 0,
-              backgroundColor: "#21390e",
-              marginLeft: '2%',
-              fontWeight: '900',
-            }}
-          />
-        )}
+        <Menu
+          mode="horizontal"
+          selectedKeys={[location.pathname]} // Set the active menu item based on current path
+          items={items}
+          style={{
+            flex: 1,
+            minWidth: 0,
+            backgroundColor: "#21390e",
+            marginLeft: "2%",
+            fontWeight: "900",
+          }}
+        />
       </Header>
     </ConfigProvider>
   );

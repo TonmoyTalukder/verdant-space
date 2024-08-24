@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Carousel, Col, Image as AntdImage, Row, Spin } from "antd";
-import "./Home.css"; 
+import "./Home.css";
 
 // Importing styles from HomeStyles.ts
 import {
@@ -9,8 +9,11 @@ import {
   imageStyle,
   colStyle,
   rowStyle,
-} from "./HomeStyles"; 
+} from "./HomeStyles";
 import MosaicImgGallery from "../../../components/MosaicImgGallery";
+import LatestProducts from "../../../components/ui/LatestProducts";
+import Sales from "../../../components/ui/Sales";
+// import HomeArticles from "../../../components/ui/HomeArticles";
 
 // Typing the src parameter as string
 const preloadImage = (src: string): Promise<void> => {
@@ -46,9 +49,10 @@ const Home: React.FC = () => {
 
   return (
     <Spin
-      style={{ marginTop: "5%", color: '#628753' }}
+      style={{ marginTop: "5%", color: "#628753" }}
       spinning={loading}
       tip="Loading..."
+      size="large"
       className="custom-spin"
     >
       {!loading && (
@@ -130,7 +134,9 @@ const Home: React.FC = () => {
                   <Col span={16} style={{ marginRight: "3%" }}>
                     <div style={{ textAlign: "end" }}>
                       <b>All time Support</b>
-                      <p>We are supporting to making any garden in your area.</p>
+                      <p>
+                        We are supporting to making any garden in your area.
+                      </p>
                     </div>
                   </Col>
                   <Col span={4}>
@@ -148,6 +154,37 @@ const Home: React.FC = () => {
           <div style={{ padding: "1vh 10vw" }}>
             <MosaicImgGallery />
           </div>
+
+          <div style={{ padding: "2% 5%" }}>
+            <div className="title-container">
+              <h1 className="hollyGroove-font" style={{ fontSize: 48, margin: 0 }}>
+                Latest Products
+              </h1>
+              <div className="horizontal-line"></div>
+            </div>
+            <LatestProducts/>
+          </div>
+
+          <div style={{ padding: "2% 5%" }}>
+            <div className="title-container">
+              <h1 className="hollyGroove-font" style={{ fontSize: 48, margin: 0 }}>
+                Sales
+              </h1>
+              <div className="horizontal-line"></div>
+            </div>
+            <Sales/>
+          </div>
+
+          <div style={{ padding: "2% 5%" }}>
+            <div className="title-container">
+              <h1 className="hollyGroove-font" style={{ fontSize: 48, margin: 0 }}>
+                Read our Articles
+              </h1>
+              <div className="horizontal-line"></div>
+            </div>
+            {/* <HomeArticles/> */}
+          </div>
+
         </div>
       )}
     </Spin>

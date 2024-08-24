@@ -1,10 +1,24 @@
-/* Home.css */
-
 .custom-spin .ant-spin-dot {
-    color: #628753; /* Change this to any color you prefer */
-  }
-  
-  .custom-spin .ant-spin-dot-item {
-    background-color: #628753; /* The dots inside the spinner */
-  }
-  
+  color: #628753; /* Change this to any color you prefer */
+}
+
+.custom-spin .ant-spin-dot-item {
+  background-color: #628753; /* The dots inside the spinner */
+}
+
+.hollyGroove-font {
+  font-family: "HollyGroove", sans-serif;
+  color: #628753;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+}
+
+.horizontal-line {
+  flex-grow: 1;
+  height: 0.8vh;
+  background-color: #628753; /* Change color as needed */
+  margin-left: 20px; /* Adjust space between text and line */
+}

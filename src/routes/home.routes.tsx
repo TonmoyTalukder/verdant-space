@@ -1,3 +1,4 @@
+import Product from "../pages/common/Product";
 import AllProducts from "../pages/home/AllProducts";
 import Articles from "../pages/home/Articles";
 import Contact from "../pages/home/Contact";
@@ -16,6 +17,11 @@ export const homePaths = [
     path: "/shop",
     element: <AllProducts />,
   },
+  {
+    name: "Product",
+    path: '/product/:productId',
+    element: <Product/>,
+},
   {
     name: "Supply Products",
     path: "/supply",

@@ -1,0 +1,48 @@
+/* Style for selected pagination item */
+.custom-pagination{
+    margin-bottom: 1.5vh;
+}
+
+.custom-pagination .ant-pagination-item-active {
+    border-color: #628753 !important; /* Border color for selected page */
+}
+
+.custom-pagination .ant-pagination-item-active a {
+    color: #628753 !important; /* Text color for selected page */
+}
+
+/* Ensure pagination items have correct hover and focus states */
+.custom-pagination .ant-pagination-item:hover,
+.custom-pagination .ant-pagination-item:focus {
+    border-color: #628753 !important;
+}
+
+.custom-pagination .ant-pagination-item:hover a,
+.custom-pagination .ant-pagination-item:focus a {
+    color: #628753 !important;
+}
+
+/* Custom styles for the Switch component when checked */
+.custom-switch.ant-switch-checked {
+    background-color: #628753 !important; /* Background color when checked */
+    border-color: #628753 !important; /* Border color when checked */
+}
+
+/* Custom styles for the Switch component when checked and hovered or focused */
+.custom-switch.ant-switch-checked:hover,
+.custom-switch.ant-switch-checked:focus {
+    background-color: #cfe8cc!important; /* Maintain background color on hover/focus */
+    border-color: #cfe8cc!important; /* Maintain border color on hover/focus */
+    box-shadow: none !important; /* Remove default focus shadow */
+}
+
+/* Custom styles for the Switch component when checked and active (clicked) */
+.custom-switch.ant-switch-checked:active {
+    background-color: #517040 !important; /* Slightly darker shade on active state */
+    border-color: #517040 !important; /* Match the border color */
+}
+
+/* Adjust handle position if needed */
+.custom-switch .ant-switch-handle {
+    top: 2px !important; /* Adjust the handle position if needed */
+}

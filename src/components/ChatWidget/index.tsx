@@ -35,7 +35,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ isFixed }) => {
       style={{
         ...styles(isMobile).chatWidget,
         position: isFixed ? "fixed" : "absolute",
-        bottom: isFixed ? "3%" : "0",
+        bottom: isFixed ? "3%" : "1%",
         right: isFixed ? "1.6%" : "1.6%",
         border: hovered ? "1px solid black" : "",
       }}

@@ -61,11 +61,6 @@ const ResponsiveDrawer = ({ open, setOpen }: ResponsiveDrawerProps) => {
             itemSelectedBg: '#98c70e',
             itemSelectedColor: '#21390e',
           },
-        //   Button: {
-        //     defaultBg: '#dfe2d200',
-        //     defaultBorderColor: '#dfe2d200',
-        //     defaultColor: '#fff',
-        //   },
         },
       }}
     >
