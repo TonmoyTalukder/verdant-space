@@ -1,22 +1,22 @@
 import { Carousel, Col, Row } from 'antd';
-import articles from './articles.json'; // Ensure this path is correct
 import { useMediaQuery } from 'react-responsive';
-import ArticleCard from './Article.Card';
+import ArticleCard from './ArticleCard';
+import { useGetArticlesQuery } from '../../redux/features/articles/articlesApi';
 
-interface SubTitle {
-    subcoverImgURL?: string;
-    Text: string;
-}
-
-interface Article {
-    Title: string;
-    CoverImageUrl: string;
-    SubTitle1: SubTitle[]; // Make sure the naming matches your JSON file
-    SubTitle2?: SubTitle[];
-}
+type TArticle = {
+    title: string;
+    authorName: string;
+    authorDescription: string;
+    productsType: string;
+    content: Array<{ type: 'text' | 'image'; value: string; header: string; imageDescription?: string }>;
+    tags: string[];
+    isDeleted?: boolean; // Add soft delete field
+    _id: number;
+  };
+  
 
 // Utility function to batch products based on the number of items per carousel
-const batchArticles = (articles: Article[], itemsPerBatch: number) => {
+const batchArticles = (articles: TArticle[], itemsPerBatch: number) => {
     const batches = [];
     for (let i = 0; i < articles.length; i += itemsPerBatch) {
         batches.push(articles.slice(i, i + itemsPerBatch));
@@ -25,12 +25,17 @@ const batchArticles = (articles: Article[], itemsPerBatch: number) => {
 };
 
 const HomeArticles = () => {
+
+    const { data } = useGetArticlesQuery(undefined);
+
+    const articles = data?.data || [];
+
     // Define number of products per carousel for different screen sizes
     const productsPerCarousel = {
         xs: 1, // 1 product per carousel on extra small screens (mobile)
         sm: 1, // 1 product per carousel on small screens (tablets)
-        md: 2, // 2 products per carousel on medium screens (desktops)
-        lg: 4, // 4 products per carousel on large screens (large desktops)
+        md: 1, // 2 products per carousel on medium screens (desktops)
+        lg: 2, // 4 products per carousel on large screens (large desktops)
     };
 
     // Use media queries to determine the screen size
@@ -72,9 +77,9 @@ const HomeArticles = () => {
                                     }}
                                     key={idx}
                                     xs={24} // 1 column on extra small screens (mobile)
-                                    sm={12} // 2 columns on small screens (tablets)
-                                    md={8}  // 3 columns on medium screens (desktops)
-                                    lg={6}  // 4 columns on large screens (large desktops)
+                                    sm={24} // 2 columns on small screens (tablets)
+                                    md={24}  // 3 columns on medium screens (desktops)
+                                    lg={12}  // 4 columns on large screens (large desktops)
                                 >
                                     <ArticleCard article={article} />
                                 </Col>

@@ -4,8 +4,8 @@ import UserProfile from "../pages/user/UserProfile";
 
 export const userPaths = [
   {
-    name: "UserDashboard",
-    path: "/user/dashboard",
+    name: "Cart",
+    path: "/user/cart",
     element: <UserDashboard />,
   },
   {
@@ -14,8 +14,8 @@ export const userPaths = [
     element: <UserProfile />,
   },
   {
-    name: "History",
-    path: "/user/history",
+    name: "Orders",
+    path: "/user/orders",
     element: <UserHistory />,
   },
 ];

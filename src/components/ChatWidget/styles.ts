@@ -1,6 +1,5 @@
 export const styles = (isMobile: boolean): {
   chatWidget: React.CSSProperties;
-  chatWidgetText: React.CSSProperties;
   modalWindow: React.CSSProperties;
 } => ({
   chatWidget: {
@@ -13,13 +12,9 @@ export const styles = (isMobile: boolean): {
     cursor: "pointer",
   },
 
-  chatWidgetText: {
-    // Reserved for future use if needed
-  },
-
   modalWindow: {
-    width: isMobile ? "35vw" : "15vw",
-    height: "30vh",
+    // width: isMobile ? "35vw" : "15vw",
+    // height: "30vh",
     backgroundColor: "white",
     borderRadius: "12px",
     border: `2px solid #21390e`,

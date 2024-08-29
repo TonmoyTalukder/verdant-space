@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useContext, Key } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
+  useGetProductsQuery,
   useGetSingleProductQuery,
   useSearchProductsQuery,
 } from "../../redux/features/products/productsApi";
@@ -17,6 +18,7 @@ import {
   Table,
   Tag,
   Carousel,
+  notification,
 } from "antd";
 import { GrMoney } from "react-icons/gr";
 import { BiSolidOffer } from "react-icons/bi";
@@ -28,12 +30,35 @@ import { MdCategory } from "react-icons/md";
 import { TProduct } from "../../types/productTypes";
 import { PiArticleNyTimesBold } from "react-icons/pi";
 import { CgDanger } from "react-icons/cg";
+import styled from "styled-components";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../redux/features/cart/cartSlice";
+import { useGetArticlesQuery } from "../../redux/features/articles/articlesApi";
+
+export interface ArticleContent {
+  type: "image" | "text";
+  value: string;
+  imageDescription?: string;
+}
+
+export interface Article {
+  _id: any;
+  title: string;
+  authorName: string;
+  content: ArticleContent[];
+  tags: string[];
+}
 
 const Product = () => {
   const { getPrefixCls } = useContext(ConfigProvider.ConfigContext);
   const rootPrefixCls = getPrefixCls();
   const linearGradientButton = getLinearGradientButtonStyle(rootPrefixCls);
   const { productId } = useParams<{ productId: string }>();
+  const [quantity, setQuantity] = useState<number>(1);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   // Fetch the single product by productId using the hook
   const {
@@ -43,6 +68,17 @@ const Product = () => {
   } = useGetSingleProductQuery(productId);
   const product = productResponse?.data;
 
+  const { data: productsData } = useGetProductsQuery(undefined);
+
+  const topOrderedProducts =
+    productsData?.data
+      ?.slice() // Create a shallow copy to avoid mutating the original array
+      .sort(
+        (a: { orderedQuantity: number }, b: { orderedQuantity: number }) =>
+          b.orderedQuantity - a.orderedQuantity,
+      ) // Sort by orderedQuantity
+      .slice(0, 3) || []; // Get the top 3 products
+
   const productType = product?.type;
 
   const { data: searchResults } = useSearchProductsQuery(
@@ -51,6 +87,12 @@ const Product = () => {
       skip: !productType, // Skip query if the type is missing
     },
   );
+
+  // Fetch the articles using the query hook
+  const { data } = useGetArticlesQuery(undefined);
+  data?.data;
+  // Assuming data contains an array of articles
+  const articles: Article[] = data?.data.slice(0, 3); // Get the latest 3 articles
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
@@ -62,19 +104,6 @@ const Product = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const placeholderImage1 =
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Aloevera-mite.jpg/800px-Aloevera-mite.jpg";
-  const placeholderImage2 =
-    "https://cf.ltkcdn.net/garden/images/orig/217415-6000x4000-growingaloe.jpg";
-  const placeholderImage3 =
-    "https://www.purenature.co.nz/cdn/shop/products/AloeVera_8193e123-9779-437c-b4a4-fa635b102035.png?v=1653880861";
-
-  const placeholderImages = [
-    placeholderImage1,
-    placeholderImage2,
-    placeholderImage3,
-  ];
 
   // Initialize selectedImage state after the product is loaded
   const [selectedImage, setSelectedImage] = useState<string>("");
@@ -98,7 +127,7 @@ const Product = () => {
     return <div>Product not found!</div>;
   }
 
-  const thumbnailImages = [product.image, ...placeholderImages];
+  const thumbnailImages = [product.image, ...product.placeholderImages];
   const { Text } = Typography;
 
   // Table Data
@@ -158,6 +187,83 @@ const Product = () => {
 
   const tableStyle = {
     width: windowWidth <= 768 ? "45vw" : "15vw", // Adjust the breakpoint as needed
+  };
+
+  const CounterContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-left: 16px;
+  `;
+
+  const CounterButton = styled(Button)`
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+  `;
+
+  const QuantityInput = styled.input.attrs({ readOnly: true })`
+    width: 40px;
+    text-align: center;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    margin: 0 8px;
+    // background-color: #f0f8e2;
+    cursor: default; /* This will prevent the text cursor from showing */
+  `;
+
+  const handleQuantityChange = (newQuantity: number) => {
+    if (newQuantity >= 1) {
+      setQuantity(newQuantity);
+    }
+  };
+
+  const handleAddToCartClick = () => {
+    const existingItem = cartItems.find(
+      (item) => item.productId === product.productId,
+    );
+
+    const finalPrice =
+      product.sale.onSale === "yes"
+        ? product.sale.onSaleDiscountPercentage
+          ? product.price * (1 - product.sale.onSaleDiscountPercentage / 100)
+          : product.price
+        : product.price;
+
+    if (existingItem) {
+      // Replace the existing item's quantity with the new one
+      dispatch(
+        addToCart({
+          productId: product.productId,
+          productName: product.name,
+          image: product.image,
+          price: finalPrice,
+          quantity, // Replace the existing quantity with the new quantity
+        }),
+      );
+      notification.info({
+        message: "Product quantity updated",
+        description: `Quantity updated to ${quantity}`,
+      });
+    } else {
+      // Add new item to cart
+      dispatch(
+        addToCart({
+          productId: product.productId,
+          productName: product.name,
+          image: product.image,
+          price: finalPrice,
+          quantity,
+        }),
+      );
+      notification.success({
+        message: "Product added to cart",
+        description: `${product.name} added to cart with quantity ${quantity}`,
+      });
+    }
   };
 
   return (
@@ -299,7 +405,7 @@ const Product = () => {
                     <Text mark>1-3 Business days Delivery</Text>
                     <br />
                   </p>
-                  <p style={{marginTop: '1vh'}} >
+                  <p style={{ marginTop: "1vh" }}>
                     Call +880 1700 000000 to inquire about your delivery
                     process.
                     <br />
@@ -347,13 +453,41 @@ const Product = () => {
                         className: linearGradientButton,
                       }}
                     >
-                      <Button
-                        type="primary"
-                        size="large"
-                        icon={<FaCartArrowDown />}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "left",
+                          alignContent: "center",
+                        }}
                       >
-                        Add to cart
-                      </Button>
+                        <Button
+                          type="primary"
+                          size="large"
+                          icon={<FaCartArrowDown />}
+                          onClick={handleAddToCartClick}
+                        >
+                          Add to cart
+                        </Button>
+                        <CounterContainer>
+                          <CounterButton
+                            onClick={() => handleQuantityChange(quantity - 1)}
+                          >
+                            -
+                          </CounterButton>
+                          <QuantityInput
+                            type="number"
+                            value={quantity}
+                            onChange={(e) =>
+                              handleQuantityChange(parseInt(e.target.value))
+                            }
+                          />
+                          <CounterButton
+                            onClick={() => handleQuantityChange(quantity + 1)}
+                          >
+                            +
+                          </CounterButton>
+                        </CounterContainer>
+                      </div>
                     </ConfigProvider>
                   ) : (
                     <div
@@ -498,27 +632,250 @@ const Product = () => {
               </p>
               <hr
                 style={{
-                  border: "none", // Remove default border
-                  borderTop: "0.2vh solid #d1ad0d", // Custom border color and thickness
-                  margin: "1vh 0", // Optional margin adjustment
+                  border: "none",
+                  borderTop: "0.2vh solid #d1ad0d",
+                  margin: "1vh 0",
                 }}
               />
-              <p>Additional product info or recommendations can go here.</p>
+              {topOrderedProducts.length > 0 ? (
+                <div>
+                  {topOrderedProducts.map((topProduct: TProduct) => (
+                    <Row
+                      key={topProduct.productId}
+                      style={{
+                        marginBottom: "1vh",
+                        alignItems: "center", // Align content vertically
+                      }}
+                    >
+                      <Col span={4}>
+                        {" "}
+                        {/* Adjust span to control column width */}
+                        <Image
+                          src={topProduct.image}
+                          width="50px"
+                          height="50px"
+                          style={{
+                            cursor: "pointer",
+                            objectFit: "cover",
+                            border: "2px solid gold",
+                            borderRadius: "4px",
+                          }}
+                        />
+                      </Col>
+
+                      <Col span={8}>
+                        <p
+                          style={{
+                            fontSize: "2vh",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                            color: "blue",
+                            textDecoration: "underline",
+                            transition: "color 0.3s, text-decoration 0.3s", // Smooth color and underline transition
+                          }}
+                          onClick={() => {
+                            // Navigate to the product page
+                            window.location.href = `/product/${topProduct.productId}`;
+                          }}
+                          onMouseEnter={(e) => {
+                            (e.target as HTMLParagraphElement).style.color =
+                              "#d1ad0d"; // Change color on hover
+                          }}
+                          onMouseLeave={(e) => {
+                            (e.target as HTMLParagraphElement).style.color =
+                              "blue"; // Revert color on mouse leave
+                          }}
+                        >
+                          {topProduct.name}
+                        </p>
+                      </Col>
+
+                      <Col span={12}>
+                        {topProduct.sale.onSale === "yes" && (
+                          <>
+                            <GrMoney />
+                            &nbsp;Sale Price:{" "}
+                            <b>
+                              ৳{" "}
+                              {(
+                                product.price -
+                                (product.price *
+                                  product.sale.onSaleDiscountPercentage) /
+                                  100
+                              ).toFixed(0)}
+                            </b>{" "}
+                            <br />
+                            <p>
+                              <BiSolidOffer />{" "}
+                              <span style={{ textDecoration: "line-through" }}>
+                                ৳ {topProduct.price.toFixed(0)}
+                              </span>
+                              &nbsp;&nbsp;
+                              <span style={{ color: "red" }}>
+                                {topProduct.sale.onSaleDiscountPercentage}%
+                                Discount
+                              </span>
+                            </p>
+                          </>
+                        )}
+                        {topProduct.sale.onSale === "no" && (
+                          <>
+                            <GrMoney />
+                            &nbsp;Price: <b>
+                              ৳ {topProduct.price.toFixed(0)}
+                            </b>{" "}
+                            <br />
+                          </>
+                        )}
+                      </Col>
+                    </Row>
+                  ))}
+                </div>
+              ) : (
+                <p>No top ordered products available.</p>
+              )}
             </Card>
 
-            <Card bordered={false} style={{ marginTop: "2vh" }}>
+            <Card
+              bordered={false}
+              style={{
+                marginTop: "2vh",
+                maxHeight: "134.6vh",
+                overflowY: "scroll",
+              }}
+            >
               <p style={{ fontSize: "3vh", fontWeight: "650" }}>
-                Related Articles{" "}
+                Latest Articles{" "}
                 <PiArticleNyTimesBold style={{ color: "#d1ad0d" }} />
               </p>
               <hr
                 style={{
-                  border: "none", // Remove default border
-                  borderTop: "0.2vh solid #d1ad0d", // Custom border color and thickness
-                  margin: "1vh 0", // Optional margin adjustment
+                  border: "none",
+                  borderTop: "0.2vh solid #d1ad0d",
+                  margin: "1vh 0",
                 }}
               />
-              <p>Additional product info or recommendations can go here.</p>
+
+              {/* Iterate over the articles and display the details */}
+              {articles?.map((article, index) => {
+                // Find first image and text content for each article
+                const imageContent = article.content.find(
+                  (c) => c.type === "image",
+                );
+                const textContent = article.content.find(
+                  (c) => c.type === "text",
+                );
+
+                // Truncate text content if needed
+                const truncatedText = textContent
+                  ? textContent.value.length > 150
+                    ? `${textContent.value.substring(0, 150)}...`
+                    : textContent.value
+                  : "";
+
+                return (
+                  <div key={index} style={{ marginBottom: "2vh" }}>
+                    {/* Article Image */}
+                    {imageContent && (
+                      <img
+                        src={imageContent.value}
+                        alt={imageContent.imageDescription || article.title}
+                        style={{
+                          width: "100%",
+                          height: "auto",
+                          borderRadius: "0.5vh",
+                        }}
+                      />
+                    )}
+
+                    {/* Article Title */}
+                    <p
+                      style={{
+                        fontSize: "2.5vh",
+                        fontWeight: "600",
+                        marginTop: "1vh",
+                        color: "#000",
+                        cursor: "pointer", // Add pointer cursor
+                        transition: "color 0.3s, text-decoration 0.3s", // Smooth transitions
+                      }}
+                      onClick={() => {
+                        window.scrollTo(0, 0);
+                        navigate(`/article/${article._id}`);
+                      }} // Navigate on click
+                      onMouseEnter={(e) => {
+                        (e.target as HTMLParagraphElement).style.color =
+                          "#d1ad0d"; // Change color on hover
+                        (
+                          e.target as HTMLParagraphElement
+                        ).style.textDecoration = "underline"; // Add underline on hover
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.target as HTMLParagraphElement).style.color = "#000"; // Revert color on mouse leave
+                        (
+                          e.target as HTMLParagraphElement
+                        ).style.textDecoration = "none"; // Remove underline on mouse leave
+                      }}
+                    >
+                      {article.title}
+                    </p>
+
+                    {/* Author Name */}
+                    <p
+                      style={{
+                        fontSize: "2vh",
+                        fontWeight: "500",
+                        color: "#555",
+                      }}
+                    >
+                      By {article.authorName}
+                    </p>
+
+                    {/* Article Description */}
+                    <p
+                      style={{
+                        fontSize: "2vh",
+                        fontWeight: "400",
+                        color: "#333",
+                      }}
+                    >
+                      {truncatedText}
+                    </p>
+
+                    {/* Tags */}
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "1vh",
+                        marginBottom: "1vh",
+                      }}
+                    >
+                      {article.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          style={{
+                            backgroundColor: "#d1ad0d",
+                            color: "#fff",
+                            padding: "0.5vh 1vh",
+                            borderRadius: "2vh",
+                            fontSize: "1.5vh",
+                            fontWeight: "600",
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <hr
+                      style={{
+                        border: "none",
+                        borderTop: "0.1vh solid #eee",
+                        margin: "2vh 0",
+                      }}
+                    />
+                  </div>
+                );
+              })}
             </Card>
           </Col>
         </Row>

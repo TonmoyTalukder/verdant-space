@@ -51,7 +51,7 @@ const ProductCategories: React.FC<ProductCategoriesProps> = ({
 
     if (checked) {
       // Reset all Segmented states when switch is turned off
-      console.log("On Sale");
+      ("On Sale");
     }
   };
 
@@ -101,8 +101,6 @@ const ProductCategories: React.FC<ProductCategoriesProps> = ({
     }
     setOnSale(initialOnSale);
   }, [initialOnSale]);
-
- 
 
   return (
     <div style={{ padding: "1vw" }}>
@@ -161,8 +159,8 @@ const ProductCategories: React.FC<ProductCategoriesProps> = ({
           // `defaultValue` is not needed here for controlled components
         />
         <h4>
-        ✰ {ratingRange[0]} - {ratingRange[1]}
-          </h4>
+          ✰ {ratingRange[0]} - {ratingRange[1]}
+        </h4>
       </ConfigProvider>{" "}
       <br />
       <br />

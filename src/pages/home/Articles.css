@@ -1,0 +1,26 @@
+/* Articles.css */
+
+/* Style for selected pagination item */
+.custom-pagination {
+    margin: 20px 0;
+  }
+  
+  .custom-pagination .ant-pagination-item-active {
+    border-color: #2e7d32 !important; /* Border color for selected page */
+  }
+  
+  .custom-pagination .ant-pagination-item-active a {
+    color: #2e7d32 !important; /* Text color for selected page */
+  }
+  
+  /* Ensure pagination items have correct hover and focus states */
+  .custom-pagination .ant-pagination-item:hover,
+  .custom-pagination .ant-pagination-item:focus {
+    border-color: #2e7d32 !important;
+  }
+  
+  .custom-pagination .ant-pagination-item:hover a,
+  .custom-pagination .ant-pagination-item:focus a {
+    color: #2e7d32 !important;
+  }
+  

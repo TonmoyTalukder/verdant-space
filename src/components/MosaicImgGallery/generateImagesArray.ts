@@ -127,4 +127,3 @@ export const generateImagesArray = (imagePaths: string[]): ImageItem[] => {
 // ];
 
 // const generatedPhotos = generateImagesArray(photoPaths);
-// console.log(generatedPhotos);

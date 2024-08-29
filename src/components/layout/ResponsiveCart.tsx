@@ -1,7 +1,37 @@
 import { HeartOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
-import { Badge, Button, ConfigProvider } from "antd";
+import { Badge, Button, ConfigProvider, Modal } from "antd";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { useEffect, useState } from "react";
+import CartInfo from "../ui/CartInfo";
+
+interface CartItem {
+  productId: string;
+  productName: string;
+  image: string;
+  quantity: number;
+  price: number;
+}
 
 const ResponsiveCart = () => {
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const [totalQuantity, setTotalQuantity] = useState<number>(0);
+  const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+
+  const showCartModal = () => {
+    setIsCartModalOpen(true);
+  };
+
+  // Function to calculate total quantity
+  const calculateTotalQuantity = (items: CartItem[]): number => {
+    return items.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  // Recalculate total quantity whenever cartItems changes
+  useEffect(() => {
+    const totalQty = calculateTotalQuantity(cartItems); // Calculate the total quantity
+    setTotalQuantity(totalQty); // Update the state with the new total quantity
+  }, [cartItems]); // Dependency on cartItems to update total quantity when items change
   return (
     <div
       style={{
@@ -55,10 +85,25 @@ const ResponsiveCart = () => {
             },
           }}
         >
-          <Badge count={0} showZero>
-            <Button icon={<ShoppingCartOutlined />}/>
+          <Badge count={totalQuantity} showZero>
+            <Button icon={<ShoppingCartOutlined />} onClick={showCartModal} />
           </Badge>
         </ConfigProvider>
+
+        <Modal
+          title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update Cart" 
+          visible={isCartModalOpen}
+          onCancel={() => setIsCartModalOpen(false)}
+          footer={null}
+          width="100vw"
+          style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', overflowY: "scroll", overflowX: 'scroll' }} 
+          bodyStyle={{ display: 'flex', justifyContent: 'center', alignContent: 'center', maxHeight: "60vh", width: '100vw', overflowY: "scroll", overflowX: 'scroll' }} // Ensure modal content scrolls if necessary
+        >
+          <div style={{ minHeight: "25vh" }}>
+            <CartInfo 
+            />
+          </div>
+        </Modal>
     </div>
   );
 };

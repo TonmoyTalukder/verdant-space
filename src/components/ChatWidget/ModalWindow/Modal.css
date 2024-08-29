@@ -1,0 +1,40 @@
+.modal-header {
+  display: flex;
+  justify-content: center;
+  height: 45%;
+  background: linear-gradient(
+    135deg,
+    #4d7c3a,
+    #202a1f
+  ); /* Gradient background */
+  border-radius: 0px 0px 10px 10px;
+  padding: 10px; /* Optional padding */
+}
+
+@keyframes bounceInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounceInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

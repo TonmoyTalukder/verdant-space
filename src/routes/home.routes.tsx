@@ -1,3 +1,4 @@
+import Article from "../pages/common/Article";
 import Product from "../pages/common/Product";
 import AllProducts from "../pages/home/AllProducts";
 import Articles from "../pages/home/Articles";
@@ -19,9 +20,9 @@ export const homePaths = [
   },
   {
     name: "Product",
-    path: '/product/:productId',
-    element: <Product/>,
-},
+    path: "/product/:productId",
+    element: <Product />,
+  },
   {
     name: "Supply Products",
     path: "/supply",
@@ -31,6 +32,11 @@ export const homePaths = [
     name: "Articles",
     path: "/articles",
     element: <Articles />,
+  },
+  {
+    name: "Article",
+    path: "/article/:articleId",
+    element: <Article />,
   },
   {
     name: "FAQ",

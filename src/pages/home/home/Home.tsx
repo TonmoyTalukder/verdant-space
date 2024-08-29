@@ -13,7 +13,7 @@ import {
 import MosaicImgGallery from "../../../components/MosaicImgGallery";
 import LatestProducts from "../../../components/ui/LatestProducts";
 import Sales from "../../../components/ui/Sales";
-// import HomeArticles from "../../../components/ui/HomeArticles";
+import HomeArticles from "../../../components/ui/HomeArticles";
 
 // Typing the src parameter as string
 const preloadImage = (src: string): Promise<void> => {
@@ -157,34 +157,42 @@ const Home: React.FC = () => {
 
           <div style={{ padding: "2% 5%" }}>
             <div className="title-container">
-              <h1 className="hollyGroove-font" style={{ fontSize: 48, margin: 0 }}>
+              <h1
+                className="hollyGroove-font"
+                style={{ fontSize: 48, margin: 0 }}
+              >
                 Latest Products
               </h1>
               <div className="horizontal-line"></div>
             </div>
-            <LatestProducts/>
+            <LatestProducts />
           </div>
 
           <div style={{ padding: "2% 5%" }}>
             <div className="title-container">
-              <h1 className="hollyGroove-font" style={{ fontSize: 48, margin: 0 }}>
+              <h1
+                className="hollyGroove-font"
+                style={{ fontSize: 48, margin: 0 }}
+              >
                 Sales
               </h1>
               <div className="horizontal-line"></div>
             </div>
-            <Sales/>
+            <Sales />
           </div>
 
           <div style={{ padding: "2% 5%" }}>
             <div className="title-container">
-              <h1 className="hollyGroove-font" style={{ fontSize: 48, margin: 0 }}>
+              <h1
+                className="hollyGroove-font"
+                style={{ fontSize: 48, margin: 0 }}
+              >
                 Read our Articles
               </h1>
               <div className="horizontal-line"></div>
             </div>
-            {/* <HomeArticles/> */}
+            <HomeArticles />
           </div>
-
         </div>
       )}
     </Spin>

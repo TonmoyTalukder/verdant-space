@@ -11,13 +11,14 @@ interface SearchTabProps {
 }
 
 const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [visible, setVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [visible, setVisible] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<TProduct[]>([]);
   const searchTabRef = useRef<HTMLDivElement>(null); // Ref to detect outside clicks
 
-  const { data: searchResults } = useSearchProductsQuery(searchQuery, {
-    skip: !searchQuery,
+  // Fetch search results from the API
+  const { data: searchResults } = useSearchProductsQuery({
+    searchTerm: searchQuery,
   });
 
   // Debounced function to set the search query
@@ -49,60 +50,44 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
     };
   }, [setShowSearchTab]);
 
-  // const logNames = () => {
-  //   if (searchResults && searchResults.data && Array.isArray(searchResults.data)) {
-  //     searchResults.data.forEach((item: TProduct) => {
-  //       if (item.name) {
-  //         console.log(item.name);
-  //         setSuggestions([item.name]);
-  //       } else {
-  //         console.log("Item has no name property.");
-  //       }
-  //     });
-  //   } else {
-  //     console.log("No search results found.");
-  //   }
-  // };
-
-  const logs = () => {
+  // Update suggestions based on search results
+  const updateSuggestions = () => {
     if (
       searchResults &&
       searchResults.data &&
       Array.isArray(searchResults.data)
     ) {
-      // Collect all valid items
+      // Filter valid items
       const validItems = searchResults.data.filter(
         (item: TProduct) => item.name,
       );
 
       if (validItems.length > 0) {
-        // Update suggestions state with all valid items
-        console.log(validItems);
         setSuggestions(validItems);
       } else {
-        console.log("No valid items found.");
         setSuggestions([]); // Clear suggestions if no valid items
       }
     } else {
-      console.log("No search results found.");
       setSuggestions([]); // Clear suggestions if no results
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(e.target.value);
-    setVisible(e.target.value.trim() !== "");
+  useEffect(() => {
+    updateSuggestions();
+  }, [searchResults]);
 
-    // Log the search text in real-time
-    console.log("Current Search Text:", e.target.value);
-    console.log("searchResults.data[0].name: ", searchResults.data[0].name);
-    logs();
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    debouncedSearch(value);
+    setVisible(value.trim() !== "");
+
+    // Log current search text
+    console.log("Current Search Text:", value);
+    console.log("Current searchResults:", searchResults);
   };
 
   const handleSearch = () => {
     console.log("Search Text:", searchQuery);
-    // console.log(searchResults);
-    logs();
   };
 
   return (
@@ -146,25 +131,6 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
 
       {/* Suggestion box */}
       <div className="suggestion-box">
-        {/* <p style={{ color: "#888", margin: 0 }}>
-          {searchQuery.trim() === "" ? "Nothing found" : "Suggestions will appear here..."}
-          {searchQuery.trim() === "" ? "Nothing found" : `${searchResults.data[0].name}`}
-        </p> */}
-
-        {/* {suggestions.length > 0 ? (
-          suggestions.map((suggestion, index) => (
-            <p key={index} style={{ color: "#333", margin: 0 }}>
-              {suggestion}
-            </p>
-          ))
-        ) : (
-          <p style={{ color: "#888", margin: 0 }}>
-            {searchQuery.trim() === ""
-              ? "Start typing to see suggestions..."
-              : "No suggestions found"}
-          </p>
-        )} */}
-
         {suggestions.length > 0 ? (
           suggestions.map((product) => (
             <Row
@@ -172,48 +138,93 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
               style={{
                 marginBottom: "10px",
                 display: "flex",
-                alignContent: "center", // Align items vertically
-                padding: "10px", // Optional: Adds padding for better spacing
-                backgroundColor: "#f9f9f9", // Optional: Background color
+                alignItems: "center",
+                padding: "10px",
+                backgroundColor: "#f9f9f9",
               }}
             >
               <Col
                 span={24}
-                style={{
-                  display: "flex",
-                  // alignItems: "center", // Align items vertically
-                  justifyContent: "left", // Space between items
-                }}
+                style={{ display: "flex", justifyContent: "left" }}
               >
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  style={{ width: "6vw", height: "6vh", marginRight: "2vw" }}
-                />
-                <div
+                <Row
                   style={{
-                    display: "flex",
-                    // alignItems: "center", // Align items vertically
-                    justifyContent: "space-between", // Space between items
+                    marginBottom: "1vh",
+                    alignItems: "center", // Align items vertically in the middle
                     width: "100%",
-                    marginLeft: "2vw",
-                    marginRight: "1vw",
                   }}
                 >
-                  <div>
-                    <b>{product.name}</b>&#160;&#160;&#160;
-                    <span>{product.type}</span>
-                    <p>{product.price}</p>
-                  </div>
-                  <div style={{ textAlign: "center" }}>
+                  {/* Image Column */}
+                  <Col span={6}>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      style={{
+                        width: "6vw",
+                        height: "6vh",
+                        // marginRight: "2vw",
+                      }}
+                    />
+                  </Col>
+
+                  {/* Product Info Column */}
+                  <Col span={10}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                      }}
+                    >
+                      <div>
+                        <p
+                          style={{
+                            color: "blue",
+                            textDecoration: "underline",
+                            fontWeight: "800",
+                            cursor: "pointer", // Make it look clickable
+                            textAlign: "left",
+                          }}
+                          onClick={() => {
+                            // Navigate to the product page
+                            window.location.href = `/product/${product.productId}`;
+                          }}
+                          onMouseEnter={(e) => {
+                            (e.target as HTMLParagraphElement).style.color =
+                              "#d1ad0d"; // Change color on hover
+                          }}
+                          onMouseLeave={(e) => {
+                            (e.target as HTMLParagraphElement).style.color =
+                              "blue"; // Revert color on mouse leave
+                          }}
+                        >
+                          {product.name}
+                        </p>
+                        <p style={{ textAlign: "left" }}>{product.type}</p>
+                        <p style={{ textAlign: "left" }}>
+                          Price: ৳ {product.price}
+                        </p>
+                      </div>
+                    </div>
+                  </Col>
+
+                  {/* Rating Column */}
+                  <Col span={8} style={{ textAlign: "center" }}>
                     <Rate allowHalf disabled value={product.rating} />
-                  </div>
-                </div>
+                  </Col>
+                </Row>
               </Col>
             </Row>
           ))
         ) : (
-          <div style={{ display: "flex", alignItems: "center", justifyContent: 'center', height: '13vh' }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "13vh",
+            }}
+          >
             <p style={{ color: "#888", margin: 0, textAlign: "center" }}>
               {searchQuery.trim() === ""
                 ? "Start typing to see suggestions..."

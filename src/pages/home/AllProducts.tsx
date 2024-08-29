@@ -222,7 +222,13 @@ const AllProducts = () => {
 
   return (
     <div>
-      <Row>
+      <Row
+      style={{
+        borderRadius: "0px 0px 50px 50px",
+        margin: "0vh 0.4vw",
+        boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)"
+      }}
+      >
         {!isMobile && (
           <Col
             style={{
@@ -230,6 +236,7 @@ const AllProducts = () => {
               backgroundColor: "#cfe8cc",
               overflowY: "visible",
               overflowX: "hidden",
+              borderRadius: "0px 0px 0px 20px",
             }}
             span={4}
           >
@@ -296,6 +303,8 @@ const AllProducts = () => {
             width: "100%",
             overflowY: "auto",
             overflowX: "hidden",
+            backgroundColor: '#eaf4e5',
+            borderRadius: "0px 0px 20px 0px",
           }}
           span={isMobile ? 20 : 20}
           offset={isMobile ? 0 : 0}

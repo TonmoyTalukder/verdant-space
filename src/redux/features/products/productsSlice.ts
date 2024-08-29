@@ -55,7 +55,7 @@ export default productsSlice.reducer;
 //         state.products.push({ name, description });
         
 //         // Convert state to a plain object for logging
-//       console.log("Updated state (plain):", JSON.stringify(state.products));
+//       ("Updated state (plain):", JSON.stringify(state.products));
 //       },
 //     },
 //   });

@@ -9,6 +9,7 @@ export type TProduct = {
   createdAt: string;
   description: string;
   image: string;
+  placeholderImages: string[];
   inventory: {
     quantity: number;
     inStock: boolean;
@@ -18,6 +19,7 @@ export type TProduct = {
   name: string;
   price: number;
   productId: string;
+  orderedQuantity: number;
   rating: number;
   sale: TSale;
   seasonal: string;

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import { DownCircleOutlined } from "@ant-design/icons";
 import { Button, ConfigProvider, Row, Col, Spin, Alert } from "antd";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { getLinearGradientButtonStyle } from "./GradientButtonStyles";
 import ProductCard from "./ProductCard";
 import { TProduct } from "../../types/productTypes";
 import { useGetProductsQuery } from "../../redux/features/products/productsApi";
-import debounce from 'lodash/debounce';
+import debounce from "lodash/debounce";
 
 type TProductWithDate = TProduct & { updatedAt: string }; // Extend TProduct to include updatedAt
 
@@ -15,9 +15,13 @@ const LatestProducts: React.FC = () => {
   const rootPrefixCls = getPrefixCls();
   const linearGradientButton = getLinearGradientButtonStyle(rootPrefixCls);
   const navigate = useNavigate();
-  
+
   // Fetch products data using the useGetProductsQuery hook
-  const { data: productsData, error, isLoading } = useGetProductsQuery(undefined);
+  const {
+    data: productsData,
+    error,
+    isLoading,
+  } = useGetProductsQuery(undefined);
 
   // Debounced fetch function
   const debouncedFetch = debounce(() => {
@@ -28,10 +32,10 @@ const LatestProducts: React.FC = () => {
     debouncedFetch();
   }, [debouncedFetch]);
 
-  console.log("productsData: ", productsData);
-
   // Function to get the latest 8 products
-  const getLatestProducts = (products: TProductWithDate[]): TProductWithDate[] => {
+  const getLatestProducts = (
+    products: TProductWithDate[],
+  ): TProductWithDate[] => {
     // Check if products is an array
     if (!Array.isArray(products)) {
       console.error("Products data is not an array");
@@ -42,7 +46,10 @@ const LatestProducts: React.FC = () => {
     const productsCopy = [...products];
 
     return productsCopy
-      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()) // Sort by updatedAt descending
+      .sort(
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+      ) // Sort by updatedAt descending
       .slice(0, 8); // Get the latest 8 products
   };
 

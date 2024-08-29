@@ -15,6 +15,7 @@ import {
   Rate,
   Col,
   Row,
+  Modal,
 } from "antd";
 import type { InputRef } from "antd";
 import "./Banner.css";
@@ -24,8 +25,20 @@ import { debounce } from "lodash";
 import { useDispatch } from "react-redux";
 import { setSearchResults } from "../../redux/features/products/productsSlice";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import CartInfo from "./CartInfo";
+import WishlistDrawer from "./WishlistDrawer";
 
 const { Option } = Select;
+
+interface CartItem {
+  productId: string;
+  productName: string;
+  image: string;
+  quantity: number;
+  price: number;
+}
 
 const Banner = () => {
   const [searchText, setSearchText] = useState("");
@@ -33,6 +46,32 @@ const Banner = () => {
   const [suggestionsVisible, setSuggestionsVisible] = useState(false);
   const [suggestionBoxWidth, setSuggestionBoxWidth] = useState(0);
   const [suggestions, setSuggestions] = useState<TProduct[]>([]);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [totalQuantity, setTotalQuantity] = useState<number>(0);
+  const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+  const auth = useSelector((state: RootState) => state.auth);
+  const [wishlistOpen, setWishlistOpen] = useState(false);
+
+  // Check if auth is empty
+  // const isAuthEmpty = !auth || Object.keys(auth).length === 0;
+
+  const handleProceedToCheckout = () => {
+    if (auth.role === null) {
+      navigate("/login");
+    } else {
+      navigate(auth.role === "admin" ? "/admin" : "/user");
+    }
+  };
+
+  const handleWishlist = () => {
+    ("Wishlist");
+    setWishlistOpen(true);
+  };
+
+  const showCartModal = () => {
+    setIsCartModalOpen(true);
+  };
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,6 +82,30 @@ const Banner = () => {
       skip: !searchText, // Skip query if searchText is empty
     },
   );
+
+  // Function to calculate total price
+  const calculateTotalPrice = (items: CartItem[]): number => {
+    return items.reduce((total, item) => total + item.price * item.quantity, 0); // Calculate total price based on item price and quantity
+  };
+
+  // Function to calculate total quantity
+  const calculateTotalQuantity = (items: CartItem[]): number => {
+    return items.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  useEffect(() => {
+    totalQuantity;
+    const total = calculateTotalPrice(cartItems);
+    setTotalPrice(total);
+
+    `Cart items length: ${cartItems.length}`; // Log the length of the cart items array
+  }, [cartItems, totalQuantity]);
+
+  // Recalculate total quantity whenever cartItems changes
+  useEffect(() => {
+    const totalQty = calculateTotalQuantity(cartItems); // Calculate the total quantity
+    setTotalQuantity(totalQty); // Update the state with the new total quantity
+  }, [cartItems]); // Dependency on cartItems to update total quantity when items change
 
   const debouncedSearch = useRef(
     debounce((query: string) => {
@@ -59,18 +122,12 @@ const Banner = () => {
   useEffect(() => {
     if (searchResults && searchResults.success) {
       const filteredResults = searchResults.data.filter((product: TProduct) => {
-        // const matchesSearchTerm = product.name
-        //   .toLowerCase()
-        //   .includes(searchText.toLowerCase());
-
         const matchesSearchTerm =
           product.name.toLowerCase().includes(searchText.toLowerCase()) ||
           product.description
             .toLowerCase()
             .includes(searchText.toLowerCase()) ||
-          product.type
-            .toLowerCase()
-            .includes(searchText.toLowerCase()) ||
+          product.type.toLowerCase().includes(searchText.toLowerCase()) ||
           product.tags.some((tag) =>
             tag.toLowerCase().includes(searchText.toLowerCase()),
           );
@@ -82,24 +139,16 @@ const Banner = () => {
         return matchesSearchTerm && matchesType;
       });
       setSuggestions(filteredResults);
-      // console.log("Filtered results: ", filteredResults);
+      // ("Filtered results: ", filteredResults);
     } else {
       setSuggestions([]);
     }
   }, [searchResults, searchText, selectedOption]);
 
   const handleSearch = () => {
-    // const finalSearchText = selectedOption
-    //   ? `${searchText} ${selectedOption}`
-    //   : searchText;
-
-    // setSearchText(finalSearchText);
-    // console.log("Search initiated for:", searchText, "and type:", selectedOption);
-
     // Dispatch search results to the Redux store
     dispatch(setSearchResults(searchResults));
     navigate("/shop");
-    console.log("result: ", searchResults);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -310,35 +359,72 @@ const Banner = () => {
                       justifyContent: "left",
                     }}
                   >
-                    <img
-                      src={product.image}
-                      alt={product.name}
+                    <Row
                       style={{
-                        width: "6vw",
-                        height: "6vh",
-                        marginRight: "2vw",
-                      }}
-                    />
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
+                        marginBottom: "1vh",
+                        alignItems: "center", // Align items vertically in the middle
                         width: "100%",
-                        marginLeft: "2vw",
-                        marginRight: "1vw",
                       }}
                     >
-                      <div>
-                        <b>{product.name}</b>&#160;&#160;&#160;
-                        <span>{product.type}</span>
-                        <p style={{ textAlign: "left" }}>
-                          Price: ৳ {product.price}
-                        </p>
-                      </div>
-                      <div style={{ textAlign: "center" }}>
+                      {/* Image Column */}
+                      <Col span={4}>
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          style={{
+                            width: "3vw",
+                            height: "6vh",
+                            // marginRight: "2vw",
+                          }}
+                        />
+                      </Col>
+
+                      {/* Product Info Column */}
+                      <Col span={12}>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            width: "100%",
+                          }}
+                        >
+                          <div>
+                            <p
+                              style={{
+                                color: "blue",
+                                textDecoration: "underline",
+                                fontWeight: "800",
+                                cursor: "pointer", // Make it look clickable
+                                textAlign: "left",
+                              }}
+                              onClick={() => {
+                                // Navigate to the product page
+                                window.location.href = `/product/${product.productId}`;
+                              }}
+                              onMouseEnter={(e) => {
+                                (e.target as HTMLParagraphElement).style.color =
+                                  "#d1ad0d"; // Change color on hover
+                              }}
+                              onMouseLeave={(e) => {
+                                (e.target as HTMLParagraphElement).style.color =
+                                  "blue"; // Revert color on mouse leave
+                              }}
+                            >
+                              {product.name}
+                            </p>
+                            <p style={{ textAlign: "left" }}>{product.type}</p>
+                            <p style={{ textAlign: "left" }}>
+                              Price: ৳ {product.price}
+                            </p>
+                          </div>
+                        </div>
+                      </Col>
+
+                      {/* Rating Column */}
+                      <Col span={8} style={{ textAlign: "center" }}>
                         <Rate allowHalf disabled value={product.rating} />
-                      </div>
-                    </div>
+                      </Col>
+                    </Row>
                   </Col>
                 </Row>
               ))
@@ -369,11 +455,17 @@ const Banner = () => {
         >
           <Button
             style={{ marginRight: "5%" }}
+            onClick={handleProceedToCheckout}
             icon={<UserOutlined style={{ fontSize: "1.7em" }} />}
           />
           <Button
             style={{ marginRight: "8%" }}
+            onClick={handleWishlist}
             icon={<HeartOutlined style={{ fontSize: "1.7em" }} />}
+          />
+          <WishlistDrawer
+            wishlistOpen={wishlistOpen}
+            setWishlistOpen={setWishlistOpen}
           />
         </ConfigProvider>
         <ConfigProvider
@@ -393,10 +485,39 @@ const Banner = () => {
             },
           }}
         >
-          <Badge count={0} showZero>
-            <Button icon={<ShoppingCartOutlined />}>৳ 0.00</Button>
+          <Badge count={cartItems.length} showZero>
+            <Button icon={<ShoppingCartOutlined />} onClick={showCartModal}>
+              ৳ {totalPrice.toFixed(2)}
+            </Button>
           </Badge>
         </ConfigProvider>
+        <Modal
+          title="Update Cart"
+          visible={isCartModalOpen}
+          onCancel={() => setIsCartModalOpen(false)}
+          footer={null}
+          width="38vw"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+            overflowY: "auto",
+            overflowX: "hidden",
+          }}
+          bodyStyle={{
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+            maxHeight: "60vh",
+            width: "35vw",
+            overflowY: "auto",
+            overflowX: "hidden",
+          }} // Ensure modal content scrolls if necessary
+        >
+          <div style={{ minHeight: "25vh" }}>
+            <CartInfo />
+          </div>
+        </Modal>
       </div>
     </div>
   );

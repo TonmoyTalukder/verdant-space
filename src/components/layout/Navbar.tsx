@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ConfigProvider, Menu, MenuProps } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { NavLink, useLocation } from "react-router-dom";

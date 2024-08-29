@@ -3,9 +3,13 @@ import { useGetProductsQuery } from "../../redux/features/products/productsApi";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import CanvasJSReact from "@canvasjs/react-charts";
+import { useLocation } from "react-router-dom";
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const Dashboard: React.FC = () => {
+  const location = useLocation();
+  location;
+
   const {
     data: productsData,
     error,

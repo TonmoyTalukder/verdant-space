@@ -41,12 +41,6 @@ const CategoryDrawer = ({
       open={open}
       width="40%" // Set the drawer width to 40% of the screen
       maskClosable={true} // Allows closing the drawer by clicking outside
-      // headerStyle={{ display: "none" }} // Remove the header (title and close button)
-      // bodyStyle={{
-      //   padding: "0",
-      //   backgroundColor: "#cfe8cc",
-      //   color: "black",
-      // }} // Style the drawer body
     >
       <div style={{ margin: '10vh 2vw', border: '2px solid #fff', borderRadius: '5px', overflowY: 'visible', overflowX: 'hidden' }}>
         <ProductCategories
