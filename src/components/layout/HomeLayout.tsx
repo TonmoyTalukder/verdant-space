@@ -46,6 +46,7 @@ const HomeLayout = () => {
 
     return () => {
       if (footerRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         observer.unobserve(footerRef.current);
       }
     };

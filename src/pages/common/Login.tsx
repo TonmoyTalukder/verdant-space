@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import React, { useState } from "react";
 import { Row, Col, Form, Input, Button, notification } from "antd";
 import { Link, useNavigate } from "react-router-dom";

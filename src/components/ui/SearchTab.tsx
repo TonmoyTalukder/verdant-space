@@ -74,7 +74,7 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
 
   useEffect(() => {
     updateSuggestions();
-  }, [searchResults]);
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
