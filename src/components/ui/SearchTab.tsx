@@ -8,6 +8,7 @@ import { TProduct } from "../../types/productTypes";
 import { useDispatch } from "react-redux";
 import { setSearchResults } from "../../redux/features/products/productsSlice";
 import { useNavigate } from "react-router-dom";
+import { useDebounce } from "../../hooks/useDebounce";
 
 interface SearchTabProps {
   setShowSearchTab: (show: boolean) => void;
@@ -15,6 +16,7 @@ interface SearchTabProps {
 
 const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 300); // Debounce the search input with a 500ms delay
   const [visible, setVisible] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<TProduct[]>([]);
   const searchTabRef = useRef<HTMLDivElement>(null); // Ref to detect outside clicks
@@ -23,8 +25,11 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
 
   // Fetch search results from the API
   const { data: searchResults } = useSearchProductsQuery({
-    searchTerm: searchQuery,
-  });
+    searchTerm: debouncedSearchQuery,
+  },
+  {
+    skip: !debouncedSearchQuery, // Skip query if searchQuery is empty
+  },);
 
   // Debounced function to set the search query
   const debouncedSearch = useRef(

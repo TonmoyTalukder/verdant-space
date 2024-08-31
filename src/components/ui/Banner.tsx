@@ -29,6 +29,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import CartInfo from "./CartInfo";
 import WishlistDrawer from "./WishlistDrawer";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const { Option } = Select;
 
@@ -52,6 +53,8 @@ const Banner = () => {
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const auth = useSelector((state: RootState) => state.auth);
   const [wishlistOpen, setWishlistOpen] = useState(false);
+
+  const debouncedSearchText = useDebounce(searchText, 300); // Debounce the search input with a 500ms delay
 
   // Check if auth is empty
   // const isAuthEmpty = !auth || Object.keys(auth).length === 0;
@@ -77,9 +80,9 @@ const Banner = () => {
   const navigate = useNavigate();
 
   const { data: searchResults } = useSearchProductsQuery(
-    { searchTerm: searchText, type: selectedOption },
+    { searchTerm: debouncedSearchText, type: selectedOption },
     {
-      skip: !searchText, // Skip query if searchText is empty
+      skip: !debouncedSearchText, // Skip query if searchText is empty
     },
   );
 

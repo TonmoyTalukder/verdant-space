@@ -7,6 +7,7 @@ import VerdantSpaceBanner from "/VerdantSpace Banner.png"; // Assuming you are i
 import { useGetSingleUserQuery } from "../../redux/features/users/users.Api";
 import { useDispatch } from "react-redux";
 import { setUserRole } from "../../redux/features/users/authSlice";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -137,12 +138,13 @@ const Column2Styles = styled(Col)`
 const Login: React.FC = () => {
   const [form] = Form.useForm();
   const [email, setEmail] = useState("");
+  const debouncedSearchEmail = useDebounce(email, 500); // Debounce the search input with a 500ms delay
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { data: user, isFetching } = useGetSingleUserQuery(email, {
-    skip: !email, // Skip the query if email is empty
+  const { data: user, isFetching } = useGetSingleUserQuery(debouncedSearchEmail, {
+    skip: !debouncedSearchEmail, // Skip the query if email is empty
   });
 
   // (user);

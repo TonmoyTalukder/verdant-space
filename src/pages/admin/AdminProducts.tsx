@@ -31,11 +31,13 @@ import {
   useAddProductMutation,
 } from "../../redux/features/products/productsApi";
 import { TProduct } from "../../types/productTypes";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const { Option } = Select;
 
 const AdminProducts = () => {
   const [searchText, setSearchText] = useState<string | null>(null);
+  const debouncedSearchText = useDebounce(searchText!, 500); // Debounce the search input with a 500ms delay
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isAddProductModalVisible, setIsAddProductModalVisible] =
@@ -48,8 +50,8 @@ const AdminProducts = () => {
 
   const { data: searchResults, isLoading: isSearchLoading } =
     useSearchProductsQuery(
-      { searchTerm: searchText, type: selectedOption },
-      { skip: !searchText && !selectedOption },
+      { searchTerm: debouncedSearchText, type: selectedOption },
+      { skip: !debouncedSearchText && !selectedOption },
     );
 
   const [addProduct] = useAddProductMutation(); // Hook to add a product

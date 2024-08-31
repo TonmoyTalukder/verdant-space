@@ -83,6 +83,7 @@ const UserDashboard = () => {
   const [totalAmount, setTotalAmount] = useState<number>(0);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [editableAddress, setEditableAddress] = useState<string>("");
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -100,6 +101,13 @@ const UserDashboard = () => {
     skip: !searchingEmail,
   });
   const userDetails = user?.data;
+
+  // Pre-fill address when user details are fetched
+  useEffect(() => {
+    if (userDetails?.address) {
+      setEditableAddress(userDetails.address); // Set the default address
+    }
+  }, [userDetails]);
 
   // Fetch all products at once instead of individually
   const { data: productsData } = useGetProductsQuery(undefined);
@@ -144,7 +152,7 @@ const UserDashboard = () => {
       const product = products.find(
         (p: TProduct) => p.productId === item.productId,
       ); // Compare productId with cartItems
-    
+
       if (!product || product.inventory.quantity < item.quantity) {
         return { success: false, product }; // product could be undefined
       }
@@ -177,7 +185,7 @@ const UserDashboard = () => {
         productId: item.productId,
         quantity: item.quantity,
       })),
-      address: userDetails.address,
+      address: editableAddress,
       payment: {
         method: "Not Selected", // Use a placeholder for payment method
         status: "unpaid",
@@ -227,7 +235,7 @@ const UserDashboard = () => {
       const finalOrder = {
         userId: userDetails._id,
         products: orderedProducts, // Use products stored in Redux slice
-        address: userDetails.address,
+        address: editableAddress,
         payment: {
           method: paymentMethod,
           status: isCOD ? "unpaid" : "paid",
@@ -412,6 +420,19 @@ const UserDashboard = () => {
             size="small"
           />
         </SummaryTableContainer>
+      )}
+      {cartItems.length > 0 && (
+        <>
+          <br />
+          <h3>Shipping Address:</h3>
+          <Input
+            placeholder="Enter your delivery address"
+            value={editableAddress}
+            onChange={(e) => setEditableAddress(e.target.value)} // Allow editing of address
+            style={{ width: "20vw", marginTop: '5px' }}
+          />
+          <br />
+        </>
       )}
       <br />
       <div

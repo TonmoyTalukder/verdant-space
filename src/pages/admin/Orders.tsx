@@ -327,6 +327,12 @@ const Orders = () => {
           >
             <Text>{selectedOrder?.payment?.price}</Text>
           </Form.Item>
+          <Form.Item
+            label={<span style={{ fontWeight: "bold" }}>Payment Method</span>}
+            name="payment method"
+          >
+            <Text>{selectedOrder?.payment?.method}</Text>
+          </Form.Item>
           <Form.Item label="Payment Status" name="paymentStatus">
             <Select>
               <Option value="paid">Paid</Option>
@@ -348,31 +354,32 @@ const Orders = () => {
             {(fields) => (
               <>
                 {fields.map((field, index) => (
-                  <Space key={`${field.key}-${index}`} align="baseline">
-                    <Form.Item
-                      {...field}
-                      key={`product-id-${index}`} // Explicitly define a unique key
-                      label="Product ID"
-                      name={[field.name, "productId"]}
-                    >
-                      <AntdInput disabled />
-                    </Form.Item>
-                    <Form.Item
-                      {...field}
-                      key={`quantity-${index}`} // Explicitly define a unique key
-                      label="Quantity"
-                      name={[field.name, "quantity"]}
-                    >
-                      <AntdInput disabled />
-                    </Form.Item>
-                    <Button
-                      type="link"
-                      danger
-                      onClick={() => removeProduct(index)}
-                    >
-                      Delete
-                    </Button>
-                  </Space>
+               
+                    <Space key={`${field.key}-${index}`} align="baseline">
+                      <Form.Item
+                        {...field}
+                        key={`product-id-${index}`} // Explicitly define a unique key
+                        label="Product ID"
+                        name={[field.name, "productId"]}
+                      >
+                        <AntdInput disabled />
+                      </Form.Item>
+                      <Form.Item
+                        {...field}
+                        key={`quantity-${index}`} // Explicitly define a unique key
+                        label="Quantity"
+                        name={[field.name, "quantity"]}
+                      >
+                        <AntdInput disabled />
+                      </Form.Item>
+                      <Button
+                        type="link"
+                        danger
+                        onClick={() => removeProduct(index)}
+                      >
+                        Delete
+                      </Button>
+                    </Space>
                 ))}
               </>
             )}
