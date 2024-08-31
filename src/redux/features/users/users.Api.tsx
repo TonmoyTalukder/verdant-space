@@ -28,7 +28,7 @@ const productsApi = baseApi.injectEndpoints({
           body: data,
         };
       },
-      invalidatesTags: ["user"],
+      invalidatesTags: ["user", "singleUser"],
     }),
 
     updateUser: builder.mutation({
@@ -39,7 +39,7 @@ const productsApi = baseApi.injectEndpoints({
           body: users,
         };
       },
-      invalidatesTags: ["user"],
+      invalidatesTags: ["user", "singleUser"],
     }),
 
     deleteUser: builder.mutation({
@@ -50,7 +50,7 @@ const productsApi = baseApi.injectEndpoints({
           body: user,
         };
       },
-      invalidatesTags: ["user"],
+      invalidatesTags: ["user", "singleUser"],
     }),
   }),
 });

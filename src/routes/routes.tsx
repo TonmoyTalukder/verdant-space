@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import {  createHashRouter } from "react-router-dom"; // createBrowserRouter,
 import App from "../App";
 import Login from "../pages/common/Login";
 import Register from "../pages/common/Register";
@@ -8,7 +8,7 @@ import { routeGenerator } from "../utils/routesGenerator";
 import { userPaths } from "./user.routes";
 import { homePaths } from "./home.routes";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
         path: '/',
         element: <App/>,
@@ -24,10 +24,6 @@ const router = createBrowserRouter([
         element: <UserLayout/>,
         children: routeGenerator(userPaths),
     },
-    // {
-    //     path: '/shop/:productId',
-    //     element: <Product/>,
-    // },
     {
         path: '/login',
         element: <Login/>,

@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
 import CartInfo from "../ui/CartInfo";
+import WishlistDrawer from "../ui/WishlistDrawer";
+import { useNavigate } from "react-router-dom";
 
 interface CartItem {
   productId: string;
@@ -17,6 +19,10 @@ const ResponsiveCart = () => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const [totalQuantity, setTotalQuantity] = useState<number>(0);
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
+  const [wishlistOpen, setWishlistOpen] = useState(false);
+  const auth = useSelector((state: RootState) => state.auth);
+
+  const navigate = useNavigate();
 
   const showCartModal = () => {
     setIsCartModalOpen(true);
@@ -32,6 +38,19 @@ const ResponsiveCart = () => {
     const totalQty = calculateTotalQuantity(cartItems); // Calculate the total quantity
     setTotalQuantity(totalQty); // Update the state with the new total quantity
   }, [cartItems]); // Dependency on cartItems to update total quantity when items change
+
+  const handleProceedToCheckout = () => {
+    if (auth.role === null) {
+      navigate("/login");
+    } else {
+      navigate(auth.role === "admin" ? "/admin" : "/user");
+    }
+  };
+
+  const handleWishlist = () => {
+    ("Wishlist");
+    setWishlistOpen(true);
+  };
   return (
     <div
       style={{
@@ -65,8 +84,12 @@ const ResponsiveCart = () => {
             },
           }}
         >
-          <Button style={{marginRight: '5%'}} icon={<UserOutlined />} />
-          <Button style={{marginRight: '5%'}} icon={<HeartOutlined />} />
+          <Button style={{marginRight: '5%'}} onClick={handleProceedToCheckout} icon={<UserOutlined />} />
+          <Button style={{marginRight: '5%'}} onClick={handleWishlist} icon={<HeartOutlined />} />
+          <WishlistDrawer
+            wishlistOpen={wishlistOpen}
+            setWishlistOpen={setWishlistOpen}
+          />
         </ConfigProvider>
         <ConfigProvider
           theme={{

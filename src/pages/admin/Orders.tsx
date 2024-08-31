@@ -40,7 +40,6 @@ const Orders = () => {
   const [updateOrder] = useUpdateOrderMutation();
 
   const handleDelete = async (orderId: string) => {
-
     try {
       await deleteOrder(orderId).unwrap();
       ("Order deleted successfully!");
@@ -278,6 +277,10 @@ const Orders = () => {
         columns={columns}
         rowKey="_id"
         loading={isLoading}
+        style={{
+          maxHeight: "65vh",
+          overflow: "auto",
+        }}
       />
 
       {/* Update Order Modal */}

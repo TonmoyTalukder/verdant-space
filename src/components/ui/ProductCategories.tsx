@@ -213,8 +213,8 @@ const ProductCategories: React.FC<ProductCategoriesProps> = ({
         >
           <Row>
             <Col span={24}>
-              <Checkbox style={{ marginLeft: "1vw" }} value="Fruit">
-                Fruit
+              <Checkbox style={{ marginLeft: "1vw" }} value="Fruits">
+                Fruits
               </Checkbox>
             </Col>
             <Col span={24}>

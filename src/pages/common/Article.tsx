@@ -25,6 +25,11 @@ const Article: React.FC = () => {
   // Check if data is available and extract article
   const article = articleData?.data;
 
+  // Detect if it's mobile
+  const isMobile = window.innerWidth <= 768;
+
+  console.log(isMobile);
+
   if (isLoading) return <p>Loading...</p>;
   if (error) {
     return <p>Error loading article.</p>;
@@ -153,24 +158,48 @@ const Article: React.FC = () => {
                 paddingTop: "20px",
               }}
             >
-              <Row align="middle" gutter={16}>
-                <Col span={2} style={{ textAlign: "center" }}>
-                  <UserOutlined style={{ fontSize: "4em", color: "#3a3a3a" }} />
+              <Row
+                align={isMobile ? "top" : "middle"}
+                gutter={16}
+                style={{
+                  flexDirection: isMobile ? "column" : "row",
+                  textAlign: isMobile ? "justify" : "justify",
+                }}
+              >
+                <Col
+                  span={isMobile ? 24 : 2}
+                  style={{
+                    textAlign: isMobile ? "left" : "center",
+                    marginBottom: isMobile ? "20px" : "0",   
+                    marginLeft: isMobile ? "40%" : "0",   
+                    // border: '2px solid red',
+                  }}
+                >
+                  <UserOutlined
+                    style={{
+                      fontSize: "4em",
+                      color: "#3a3a3a",
+                    }}
+                  />
                 </Col>
-                <Col span={22}>
+                <Col span={isMobile ? 24 : 22}>
                   <Title
                     level={4}
                     style={{
                       color: "#3a3a3a",
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: isMobile ? "center" : "left",
+                      justifyContent: isMobile ? "center" : "flex-start",
                     }}
                   >
                     <EditOutlined style={{ marginRight: "10px" }} />
                     {article.authorName}
                   </Title>
                   <Divider
-                    style={{ margin: "10px 0", borderColor: "#d9d9d9" }}
+                    style={{
+                      margin: "10px 0",
+                      borderColor: "#d9d9d9",
+                    }}
                   />
                   <Text style={{ color: "#4a4a4a" }}>
                     {article.authorDescription}

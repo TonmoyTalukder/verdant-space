@@ -41,7 +41,7 @@ const productsApi = baseApi.injectEndpoints({
           body: data,
         };
       },
-      invalidatesTags: ["product"],
+      invalidatesTags: ["product", "singleProduct"],
     }),
     updateProduct: builder.mutation({
       query: (products) => {
@@ -51,7 +51,7 @@ const productsApi = baseApi.injectEndpoints({
           body: products,
         };
       },
-      invalidatesTags: ["product"],
+      invalidatesTags: ["product", "singleProduct"],
     }),
     deleteProduct: builder.mutation({
       query: (products) => {
@@ -61,7 +61,7 @@ const productsApi = baseApi.injectEndpoints({
           body: products,
         };
       },
-      invalidatesTags: ["product"],
+      invalidatesTags: ["product", "singleProduct"],
     }),
   }),
 });

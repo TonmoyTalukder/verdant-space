@@ -399,7 +399,7 @@ const Banner = () => {
                               }}
                               onClick={() => {
                                 // Navigate to the product page
-                                window.location.href = `/product/${product.productId}`;
+                                window.location.href = `/#/product/${product.productId}`;
                               }}
                               onMouseEnter={(e) => {
                                 (e.target as HTMLParagraphElement).style.color =

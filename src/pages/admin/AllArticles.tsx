@@ -258,6 +258,10 @@ const AllArticles = () => {
         dataSource={filteredArticles}
         rowKey="_id"
         loading={isLoading}
+        style={{
+          maxHeight: "72vh",
+          overflow: "auto",
+        }}
       />
       <Modal
         title="Edit Article"

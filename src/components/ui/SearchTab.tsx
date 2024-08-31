@@ -5,6 +5,9 @@ import "./SearchTab.css";
 import { useSearchProductsQuery } from "../../redux/features/products/productsApi";
 import { debounce } from "lodash";
 import { TProduct } from "../../types/productTypes";
+import { useDispatch } from "react-redux";
+import { setSearchResults } from "../../redux/features/products/productsSlice";
+import { useNavigate } from "react-router-dom";
 
 interface SearchTabProps {
   setShowSearchTab: (show: boolean) => void;
@@ -15,6 +18,8 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [suggestions, setSuggestions] = useState<TProduct[]>([]);
   const searchTabRef = useRef<HTMLDivElement>(null); // Ref to detect outside clicks
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Fetch search results from the API
   const { data: searchResults } = useSearchProductsQuery({
@@ -87,7 +92,8 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
   };
 
   const handleSearch = () => {
-    console.log("Search Text:", searchQuery);
+    dispatch(setSearchResults(searchResults));
+    navigate("/shop");
   };
 
   return (
@@ -187,7 +193,7 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
                           }}
                           onClick={() => {
                             // Navigate to the product page
-                            window.location.href = `/product/${product.productId}`;
+                            window.location.href = `/#/product/${product.productId}`;
                           }}
                           onMouseEnter={(e) => {
                             (e.target as HTMLParagraphElement).style.color =

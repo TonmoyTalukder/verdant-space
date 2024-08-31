@@ -74,6 +74,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
   const dispatch = useDispatch<AppDispatch>();
+  const isMobile = window.innerWidth <= 768;
 
   useEffect(() => {
     const checkImage = async (url: string) => {
@@ -168,11 +169,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     );
 
     const finalPrice =
-    product.sale.onSale === "yes"
-      ? product.sale.onSaleDiscountPercentage
-        ? product.price * (1 - product.sale.onSaleDiscountPercentage / 100)
-        : product.price
-      : product.price;
+      product.sale.onSale === "yes"
+        ? product.sale.onSaleDiscountPercentage
+          ? product.price * (1 - product.sale.onSaleDiscountPercentage / 100)
+          : product.price
+        : product.price;
 
     if (!existingWishlistItem) {
       dispatch(
@@ -197,7 +198,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <StyledCard
-      style={{ width: 300, margin: "16px", height: 520 }}
+      style={{ width: 300, height: 520, margin: isMobile ? "0" : "16px", marginLeft: isMobile ? "-6vw" : "0vw"}}
       cover={
         <img
           style={{ height: 250, borderRadius: "12px" }}

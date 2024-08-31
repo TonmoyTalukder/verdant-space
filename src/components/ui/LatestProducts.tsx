@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { DownCircleOutlined } from "@ant-design/icons";
 import { Button, ConfigProvider, Row, Col, Spin, Alert } from "antd";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { getLinearGradientButtonStyle } from "./GradientButtonStyles";
 import ProductCard from "./ProductCard";
 import { TProduct } from "../../types/productTypes";
 import { useGetProductsQuery } from "../../redux/features/products/productsApi";
-import debounce from "lodash/debounce";
+// import debounce from "lodash/debounce";
 
 type TProductWithDate = TProduct & { updatedAt: string }; // Extend TProduct to include updatedAt
 
@@ -23,14 +23,16 @@ const LatestProducts: React.FC = () => {
     isLoading,
   } = useGetProductsQuery(undefined);
 
-  // Debounced fetch function
-  const debouncedFetch = debounce(() => {
-    // Trigger re-fetch here if needed
-  }, 300); // Adjust debounce delay as needed
+  // console.log("line 26: productsData: ", productsData);
 
-  useEffect(() => {
-    debouncedFetch();
-  }, [debouncedFetch]);
+  // // Debounced fetch function
+  // const debouncedFetch = debounce(() => {
+  //   // Trigger re-fetch here if needed
+  // }, 300); // Adjust debounce delay as needed
+
+  // useEffect(() => {
+  //   debouncedFetch();
+  // }, [debouncedFetch]);
 
   // Function to get the latest 8 products
   const getLatestProducts = (
@@ -58,6 +60,7 @@ const LatestProducts: React.FC = () => {
   }
 
   if (error) {
+    // console.log(error);
     return <Alert message="Error fetching products" type="error" />;
   }
 

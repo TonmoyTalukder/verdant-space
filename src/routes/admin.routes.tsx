@@ -1,3 +1,4 @@
+import AdminProducts from "../pages/admin/AdminProducts";
 import AllArticles from "../pages/admin/AllArticles";
 import CreateAdmin from "../pages/admin/CreateAdmin";
 import CreateArticle from "../pages/admin/CreateArticle";
@@ -5,7 +6,7 @@ import CreateProduct from "../pages/admin/CreateProduct";
 import Dashboard from "../pages/admin/Dashboard";
 import Orders from "../pages/admin/Orders";
 import PreviousShipments from "../pages/admin/PreviousShipments";
-import Products from "../pages/admin/Products";
+
 
 export const adminPaths = [
   {
@@ -21,7 +22,7 @@ export const adminPaths = [
   {
     name: "Products",
     path: "/admin/all-products",
-    element: <Products />,
+    element: <AdminProducts />,
   },
   {
     name: "Articles",

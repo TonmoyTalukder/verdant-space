@@ -34,7 +34,7 @@ import { TProduct } from "../../types/productTypes";
 
 const { Option } = Select;
 
-const Products = () => {
+const AdminProducts = () => {
   const [searchText, setSearchText] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -321,7 +321,10 @@ const Products = () => {
         columns={columns}
         rowKey="_id"
         loading={isLoading}
-        style={{ maxHeight: "80vh" }}
+        style={{
+          maxHeight: "72vh",
+          overflow: "auto",
+        }}
       />
 
       <Modal
@@ -863,4 +866,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default AdminProducts;

@@ -137,7 +137,7 @@ const HomeLayout = () => {
               VerdantSpace is your go-to destination for all things green and
               serene.
             </p>
-            <h3 style={{ color: "#21390e" }}>Contact Us</h3>
+            <h3 style={{ color: "#21390e", marginTop: "1vh",  }}>Contact Us</h3>
             <p style={{ color: "#555" }}>
               Email: contact@verdantspace.com
               <br />
@@ -147,12 +147,13 @@ const HomeLayout = () => {
 
           {/* Third Column: Shop, Supply Us, and Newsletter Subscription */}
           <Col xs={24} sm={24} md={8} lg={8} style={{ textAlign: "left" }}>
-            <h4 style={{ color: "#21390e" }}>
-              <a href="/shop" style={{ color: "#21390e" }}>
-                All Products
-              </a>
-            </h4>
-            <h4 style={{ color: "#21390e" }}>Supply Us</h4>
+            <h3 style={{ color: "#21390e" }}>
+              Shop
+            </h3>
+            <p><a href="/shop" style={{ color: "#21390e", textDecoration: "underline" }}>
+                Get Our All Products
+              </a></p>
+            <h3 style={{ color: "#21390e", marginTop: "1vh"}}>Supply Us</h3>
             <p style={{ color: "#555" }}>
               Interested in becoming a supplier?{" "}
               <a
@@ -163,7 +164,7 @@ const HomeLayout = () => {
               </a>{" "}
               with us today!
             </p>
-            <h3 style={{ marginTop: "4vh", color: "#21390e" }}>
+            <h3 style={{ marginTop: "2.5vh", color: "#21390e" }}>
               Newsletter Subscription
             </h3>
             <p style={{ color: "#555" }}>

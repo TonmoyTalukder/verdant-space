@@ -320,10 +320,10 @@ const AllProducts = () => {
             </h1>
             <br />
             <Row gutter={[16, 16]}>
-              <Col span={isMobile ? 2 : 1}>
+              <Col span={isMobile ? 4 : 1}>
                 <b>Price: </b>
               </Col>
-              <Col span={isMobile ? 22 : 23}>
+              <Col span={isMobile ? 20 : 23}>
                 <Segmented
                   options={["Low to High", "High to Low"]}
                   value={value1}
@@ -332,10 +332,10 @@ const AllProducts = () => {
                 />
               </Col>
 
-              <Col span={isMobile ? 2 : 1}>
+              <Col span={isMobile ? 4 : 1}>
                 <b>Name: </b>
               </Col>
-              <Col span={isMobile ? 22 : 23}>
+              <Col span={isMobile ? 20 : 23}>
                 <Segmented
                   options={["A-Z", "Z-A"]}
                   value={value2}
@@ -344,10 +344,10 @@ const AllProducts = () => {
                 />
               </Col>
 
-              <Col span={isMobile ? 2 : 1}>
+              <Col span={isMobile ? 4 : 1}>
                 <b>Date: </b>
               </Col>
-              <Col span={isMobile ? 22 : 23}>
+              <Col span={isMobile ? 20 : 23}>
                 <Segmented
                   options={["New to Old", "Old to New"]}
                   value={value3}
@@ -363,9 +363,9 @@ const AllProducts = () => {
             ) : error ? (
               <div>Error loading products</div>
             ) : paginatedProducts.length > 0 ? (
-              <Row gutter={[16, 16]}>
+              <Row gutter={[16, 16]} >
                 {paginatedProducts.map((product) => (
-                  <Col key={product._id} span={isMobile ? 24 : 6}>
+                  <Col key={product._id} span={isMobile ? 20 : 6}>
                     <ProductCard product={product} />
                   </Col>
                 ))}

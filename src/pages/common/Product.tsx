@@ -70,6 +70,13 @@ const Product = () => {
 
   const { data: productsData } = useGetProductsQuery(undefined);
 
+  // {
+  //   pollingInterval: 3000, // This will automatically start polling every 3000ms
+  //   refetchOnMountOrArgChange: true,
+  //   refetchOnFocus: true, // Refetch when the window gains focus
+  //   refetchOnReconnect: true, // Refetch when the network reconnects
+  // }
+
   const topOrderedProducts =
     productsData?.data
       ?.slice() // Create a shallow copy to avoid mutating the original array

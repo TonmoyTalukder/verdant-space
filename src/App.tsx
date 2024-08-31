@@ -1,9 +1,7 @@
-// import AdminLayout from "./components/layout/AdminLayout"
 import { useEffect } from "react";
 import HomeLayout from "./components/layout/HomeLayout";
 
 function App() {
-  
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
@@ -21,7 +19,6 @@ function App() {
   }, []);
 
   return <HomeLayout />;
-  // return <AdminLayout/>;
 }
 
 export default App;

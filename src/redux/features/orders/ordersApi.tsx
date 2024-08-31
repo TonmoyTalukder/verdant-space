@@ -15,6 +15,7 @@ const ordersApi = baseApi.injectEndpoints({
         url: `/api/orders/${orderId}`,
         method: "GET",
       }),
+      providesTags: ["singleOrder"],
     }),
 
     addOrder: builder.mutation({
@@ -25,7 +26,7 @@ const ordersApi = baseApi.injectEndpoints({
           body: data,
         };
       },
-      invalidatesTags: ["order"],
+      invalidatesTags: ["order", "singleOrder", "singleProduct", "product"],
     }),
     updateOrder: builder.mutation({
       query: ({ id, body }) => {
@@ -35,7 +36,7 @@ const ordersApi = baseApi.injectEndpoints({
           body,
         };
       },
-      invalidatesTags: ["order"],
+      invalidatesTags: ["order", "singleOrder", "singleProduct", "product"],
     }),
     deleteOrder: builder.mutation({
       query: (id) => {
@@ -44,7 +45,7 @@ const ordersApi = baseApi.injectEndpoints({
           method: "DELETE",
         };
       },
-      invalidatesTags: ["order"],
+      invalidatesTags: ["order", "singleOrder", "singleProduct", "product"],
     }),
   }),
 });
