@@ -28,7 +28,6 @@ const UserLayout = () => {
     };
   }, []);
 
-
   const handleLogout = () => {
     dispatch(clearUserRole())
     navigate("/");

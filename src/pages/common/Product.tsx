@@ -682,7 +682,7 @@ const Product = () => {
                           }}
                           onClick={() => {
                             // Navigate to the product page
-                            window.location.href = `/product/${topProduct.productId}`;
+                            window.location.href = `/#/product/${topProduct.productId}`;
                           }}
                           onMouseEnter={(e) => {
                             (e.target as HTMLParagraphElement).style.color =
