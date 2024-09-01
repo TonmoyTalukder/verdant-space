@@ -126,7 +126,7 @@ const TypeFlower: React.FC = () => {
         >
           <NavLink to="/shop" onClick={handleNavigation}>
             <Button type="primary" size="large" icon={<DownCircleOutlined />}>
-              See more products on sales
+              See more Flower Plants
             </Button>
           </NavLink>
         </ConfigProvider>

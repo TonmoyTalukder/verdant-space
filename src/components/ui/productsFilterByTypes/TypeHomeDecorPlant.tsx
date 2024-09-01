@@ -126,7 +126,7 @@ const TypeHomeDecorPlant: React.FC = () => {
         >
           <NavLink to="/shop" onClick={handleNavigation}>
             <Button type="primary" size="large" icon={<DownCircleOutlined />}>
-              See more products on sales
+              See more Home Decor Plants
             </Button>
           </NavLink>
         </ConfigProvider>
