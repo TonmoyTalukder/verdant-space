@@ -131,10 +131,13 @@ const ModalWindow: React.FC<ModalWindowProps> = ({
       return { width: "27vw", height: "65vh" };
     } else if (screenWidth >= 1001 && screenWidth < 1200) {
       // Large (lg)
-      return { width: "27vw", height: "40vh" };
+      return { width: "27vw", height: "45vh" };
+    } else if (screenWidth >= 1400 && screenWidth < 1550) {
+      // Large (lg)
+      return { width: "17vw", height: "52vh" };
     } else {
       // Extra Large (xl)
-      return { width: "17vw", height: "45vh" };
+      return { width: "17vw", height: "55vh" };
     }
   };
 
