@@ -297,7 +297,7 @@ const UserHistory = () => {
           >
             <Input />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name="payment"
             label="Payment Method"
             rules={[
@@ -308,7 +308,7 @@ const UserHistory = () => {
               <Select.Option value="COD">Cash on Delivery</Select.Option>
               <Select.Option value="Online">Online Payment</Select.Option>
             </Select>
-          </Form.Item>
+          </Form.Item> */}
           {/* Add more form fields as needed */}
         </Form>
       </Modal>

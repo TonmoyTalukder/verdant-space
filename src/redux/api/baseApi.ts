@@ -7,6 +7,6 @@ export const baseApi = createApi({
         baseUrl: 'https://verdantspace-server.vercel.app/',
         credentials: 'include',
     }),
-    tagTypes: ['product', 'singleProduct', 'order', 'singleOrder', 'user', 'singleUser', 'article'],
+    tagTypes: ['product', 'singleProduct', 'productSearch', 'order', 'singleOrder', 'user', 'singleUser', 'article'],
     endpoints: () => ({}),
 });
