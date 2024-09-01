@@ -66,7 +66,7 @@ const TypeFlower: React.FC = () => {
 
   // Filter products to include only those on sale
   const getOnSaleProducts = (products: TProduct[]): TProduct[] => {
-    return products.filter((product) => product.type === "Fruits");
+    return products.filter((product) => product.type === "Flower");
   };
 
   // Default to empty array if productsData is undefined or not an array
