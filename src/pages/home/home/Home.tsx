@@ -14,6 +14,11 @@ import MosaicImgGallery from "../../../components/MosaicImgGallery";
 import LatestProducts from "../../../components/ui/LatestProducts";
 import Sales from "../../../components/ui/Sales";
 import HomeArticles from "../../../components/ui/HomeArticles";
+import TypeFruits from "../../../components/ui/productsFilterByTypes/TypeFruits";
+import TypeFlower from "../../../components/ui/productsFilterByTypes/TypeFlower";
+import TypeHomeDecorPlant from "../../../components/ui/productsFilterByTypes/TypeHomeDecorPlant";
+import TypeWoodPlant from "../../../components/ui/productsFilterByTypes/TypeWoodPlant";
+import TypeHerb from "../../../components/ui/productsFilterByTypes/TypeHerb";
 
 // Typing the src parameter as string
 const preloadImage = (src: string): Promise<void> => {
@@ -179,6 +184,71 @@ const Home: React.FC = () => {
               <div className="horizontal-line"></div>
             </div>
             <Sales />
+          </div>
+
+          <div style={{ padding: "2% 5%" }}>
+            <div className="title-container">
+              <h1
+                className="hollyGroove-font"
+                style={{ fontSize: 48, margin: 0 }}
+              >
+                Fruits
+              </h1>
+              <div className="horizontal-line"></div>
+            </div>
+            <TypeFruits />
+          </div>
+
+          <div style={{ padding: "2% 5%" }}>
+            <div className="title-container">
+              <h1
+                className="hollyGroove-font"
+                style={{ fontSize: 48, margin: 0 }}
+              >
+                Flower
+              </h1>
+              <div className="horizontal-line"></div>
+            </div>
+            <TypeFlower />
+          </div>
+
+          <div style={{ padding: "2% 5%" }}>
+            <div className="title-container">
+              <h1
+                className="hollyGroove-font"
+                style={{ fontSize: 48, margin: 0 }}
+              >
+                Home Decor Plant
+              </h1>
+              <div className="horizontal-line"></div>
+            </div>
+            <TypeHomeDecorPlant />
+          </div>
+
+          <div style={{ padding: "2% 5%" }}>
+            <div className="title-container">
+              <h1
+                className="hollyGroove-font"
+                style={{ fontSize: 48, margin: 0 }}
+              >
+                Wood Plant
+              </h1>
+              <div className="horizontal-line"></div>
+            </div>
+            <TypeWoodPlant />
+          </div>
+
+          <div style={{ padding: "2% 5%" }}>
+            <div className="title-container">
+              <h1
+                className="hollyGroove-font"
+                style={{ fontSize: 48, margin: 0 }}
+              >
+                Herbal
+              </h1>
+              <div className="horizontal-line"></div>
+            </div>
+            <TypeHerb />
           </div>
 
           <div style={{ padding: "2% 5%" }}>

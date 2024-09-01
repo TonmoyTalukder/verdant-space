@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { Button, Carousel, Col, ConfigProvider, Row, Spin, Alert } from "antd";
-import ProductCard from "./ProductCard";
 import { useMediaQuery } from "react-responsive";
 import { NavLink, useNavigate } from "react-router-dom";
-import { getLinearGradientButtonStyle } from "./GradientButtonStyles";
 import { DownCircleOutlined } from "@ant-design/icons";
-import { TProduct } from "../../types/productTypes";
-import { useGetProductsQuery } from "../../redux/features/products/productsApi";
+import { TProduct } from "../../../types/productTypes";
+import { getLinearGradientButtonStyle } from "../GradientButtonStyles";
+import { useGetProductsQuery } from "../../../redux/features/products/productsApi";
+import ProductCard from "../ProductCard";
 
 // Utility function to batch products based on the number of items per carousel
 const batchProducts = (products: TProduct[], itemsPerBatch: number) => {
@@ -17,14 +17,18 @@ const batchProducts = (products: TProduct[], itemsPerBatch: number) => {
   return batches;
 };
 
-const Sales: React.FC = () => {
+const TypeWoodPlant: React.FC = () => {
   const { getPrefixCls } = useContext(ConfigProvider.ConfigContext);
   const rootPrefixCls = getPrefixCls();
   const linearGradientButton = getLinearGradientButtonStyle(rootPrefixCls);
   const navigate = useNavigate();
 
   // Fetch products data using the useGetProductsQuery hook
-  const { data: productsData, error, isLoading } = useGetProductsQuery(undefined);
+  const {
+    data: productsData,
+    error,
+    isLoading,
+  } = useGetProductsQuery(undefined);
 
   // Handle navigation to the shop page
   const handleNavigation = (
@@ -32,7 +36,7 @@ const Sales: React.FC = () => {
   ) => {
     event.preventDefault();
     window.scrollTo(0, 0);
-    navigate("/shop", { state: { onSaleFilter: true } });
+    navigate("/shop", { state: { typeFilter: "Wood Plant" } });
   };
 
   // Define number of products per carousel for different screen sizes
@@ -66,8 +70,7 @@ const Sales: React.FC = () => {
 
   // Filter products to include only those on sale
   const getOnSaleProducts = (products: TProduct[]): TProduct[] => {
-    // console.log("products: ", products)
-    return products.filter((product) => product.sale.onSale === "yes");
+    return products.filter((product) => product.type === "Wood Plant");
   };
 
   // Default to empty array if productsData is undefined or not an array
@@ -136,4 +139,4 @@ const Sales: React.FC = () => {
   );
 };
 
-export default Sales;
+export default TypeWoodPlant;

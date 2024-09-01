@@ -11,6 +11,7 @@ import { useContext, useEffect, useState } from "react";
 import "./ProductCategories.css"; // Import the CSS file
 import { UndoOutlined } from "@ant-design/icons";
 import { getLinearGradientButtonStyle } from "./GradientButtonStyles";
+import { useLocation } from "react-router-dom";
 
 interface ProductCategoriesProps {
   onChangePrice: (range: number[]) => void;
@@ -20,6 +21,11 @@ interface ProductCategoriesProps {
   onChangeOnSale: (checked: boolean) => void;
   onResetFilters: () => void; // Added this prop
   initialOnSale: boolean;
+  initialOnType: (checked: string[]) => void;
+}
+
+interface LocationState {
+  typeFilter?: string[];
 }
 
 const ProductCategories: React.FC<ProductCategoriesProps> = ({
@@ -29,6 +35,7 @@ const ProductCategories: React.FC<ProductCategoriesProps> = ({
   onChangeType,
   onChangeOnSale,
   initialOnSale,
+  initialOnType,
   // onResetFilters, // Destructure this prop
 }) => {
   const defaultPriceRange = [10, 1500];
@@ -41,6 +48,8 @@ const ProductCategories: React.FC<ProductCategoriesProps> = ({
   const [selectedSeasons, setSelectedSeasons] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [onSale, setOnSale] = useState<boolean>();
+
+  const location = useLocation() as unknown as { state: LocationState };
 
   // Handler for the Switch
   const handleSwitchChange = (checked: boolean) => {
@@ -101,6 +110,13 @@ const ProductCategories: React.FC<ProductCategoriesProps> = ({
     }
     setOnSale(initialOnSale);
   }, [initialOnSale]);
+
+  useEffect(() => {
+    if (location?.state?.typeFilter) {
+      initialOnType(location.state.typeFilter); // Call the function with the value
+      setSelectedTypes(location.state.typeFilter); // Set the initial selected types
+    }
+  }, [initialOnType, location?.state?.typeFilter]);
 
   return (
     <div style={{ padding: "1vw" }}>

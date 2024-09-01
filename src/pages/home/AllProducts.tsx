@@ -85,6 +85,13 @@ const AllProducts = () => {
   ]);
 
   useEffect(() => {
+    if (location.state?.typeFilter) {
+      setSelectedTypes(location.state?.typeFilter);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state?.typeFilter, selectedTypes, navigate, location.pathname]);
+
+  useEffect(() => {
     if (location.state?.latestFilter && value3 !== "New to Old") {
       setValue3("New to Old");
       navigate(location.pathname, { replace: true, state: {} });
@@ -254,7 +261,8 @@ const AllProducts = () => {
                 onChangeType={setSelectedTypes}
                 onChangeOnSale={setOnSaleProduct}
                 onResetFilters={resetFilters}
-                initialOnSale={onSaleProduct}
+                initialOnSale={onSaleProduct} 
+                initialOnType={(checked: string[]) => setSelectedTypes(checked)} // here goes type
               />
             </div>
           </Col>
