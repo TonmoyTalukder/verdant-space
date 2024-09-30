@@ -45,41 +45,43 @@ const ResponsiveDrawer = ({ open, setOpen }: ResponsiveDrawerProps) => {
       open={open}
       width="45%" // Set the drawer width to 45% of the screen
       maskClosable={true} // Allows closing the drawer by clicking outside
-      headerStyle={{ display: "none" }} // Remove the header (title and close button)
-      bodyStyle={{
-        padding: "0",
-        backgroundColor: "#21390e",
-        color: "#fff",
-      }} // Style the drawer body
-    >
-        <ConfigProvider
-      theme={{
-        components: {
-          Menu: {
-            itemColor: '#fff',
-            itemHoverColor: '#e3e5b5',
-            itemSelectedBg: '#98c70e',
-            itemSelectedColor: '#21390e',
-          },
-        },
+      styles={{
+        header: { display: "none" }, // Use styles.header instead of headerStyle
+        body: {
+          padding: "0",
+          backgroundColor: "#21390e",
+          color: "#fff",
+        }, // Use styles.body instead of bodyStyle
       }}
     >
-      <Menu
-        mode="vertical"
-        items={items}
-        onClick={handleMenuClick}
-        style={{
-          flex: 1,
-          backgroundColor: "#21390e",
-        //   color: "#fff",
-          borderRight: "none", // Remove the default border
-          marginTop:'7vh',
-          fontWeight: '900',
+      <ConfigProvider
+        theme={{
+          components: {
+            Menu: {
+              itemColor: "#fff",
+              itemHoverColor: "#e3e5b5",
+              itemSelectedBg: "#98c70e",
+              itemSelectedColor: "#21390e",
+            },
+          },
         }}
-        // Override default Menu item styles
-        // theme="dark" // Apply a dark theme to match the drawer background
-        inlineIndent={16} // Indent for nested items (if any)
-      />
+      >
+        <Menu
+          mode="vertical"
+          items={items}
+          onClick={handleMenuClick}
+          style={{
+            flex: 1,
+            backgroundColor: "#21390e",
+            //   color: "#fff",
+            borderRight: "none", // Remove the default border
+            marginTop: "7vh",
+            fontWeight: "900",
+          }}
+          // Override default Menu item styles
+          // theme="dark" // Apply a dark theme to match the drawer background
+          inlineIndent={16} // Indent for nested items (if any)
+        />
       </ConfigProvider>
     </Drawer>
   );

@@ -210,7 +210,7 @@ const Register: React.FC = () => {
     };
 
     try {
-      await addUser(userData).unwrap();
+      await addUser(userRegData).unwrap();
       openNotification(
         "success",
         "Registration Successful",
@@ -219,21 +219,25 @@ const Register: React.FC = () => {
       form.resetFields();
       dispatch(setUserRole({ role: "user", email: userRegData.email }));
       navigate("/user");
-    } catch (error) {
+    } catch (error: any) {
+      console.log("error ===> ", error);
       // Type narrowing for unknown error
       if (error instanceof Error) {
+        const errorMessage =
+          (error as any)?.response?.data?.message || error.message;
         openNotification(
           "error",
           "Error on Registering.",
-          `Error: ${error.message}`,
+          `Error: ${errorMessage}`,
         );
       } else {
         openNotification(
           "error",
           "Error on Registering.",
-          "An unknown error occurred",
+          `${error.data.message}`,
         );
       }
+      console.log("error => ", error);
     }
   };
 
@@ -253,7 +257,7 @@ const Register: React.FC = () => {
         <Column2Styles xs={24} sm={24} md={12}>
           <RegisterBox>
             <RegisterTitle>Create Your Account</RegisterTitle>
-            <Form layout="vertical" onFinish={handleRegister}>
+            <Form form={form} layout="vertical" onFinish={handleRegister}>
               <Form.Item
                 label="Name"
                 name="name"

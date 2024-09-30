@@ -276,7 +276,7 @@ const AdminProducts = () => {
           defaultValue="All"
         >
           <Option value="All">All Categories</Option>
-          <Option value="Fruit">Fruit</Option>
+          <Option value="Fruits">Fruits</Option>
           <Option value="Flower">Flower</Option>
           <Option value="Home Decor Plant">Home Decor Plant</Option>
           <Option value="Wood Plant">Wood Plant</Option>
@@ -331,7 +331,7 @@ const AdminProducts = () => {
 
       <Modal
         title="Add Product"
-        visible={isAddProductModalVisible}
+        open={isAddProductModalVisible}
         onCancel={() => setIsAddProductModalVisible(false)}
         footer={null}
         style={{ height: "100px" }}
@@ -599,7 +599,7 @@ const AdminProducts = () => {
 
       <Modal
         title="Update Product"
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={null}
         style={{ height: "100px" }}

@@ -286,7 +286,7 @@ const Orders = () => {
       {/* Update Order Modal */}
       <Modal
         title="Update Order"
-        visible={isModalOpen}
+        open={isModalOpen}
         footer={null}
         onCancel={() => setIsModalOpen(false)}
       >

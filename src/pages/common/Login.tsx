@@ -222,7 +222,7 @@ const Login: React.FC = () => {
         <Column2Styles xs={24} sm={12}>
           <LoginBox>
             <LoginTitle>Please Log In</LoginTitle>
-            <Form layout="vertical" onFinish={handleLogin}>
+            <Form form={form} layout="vertical" onFinish={handleLogin}>
               <Form.Item
                 label="Email"
                 name="email"

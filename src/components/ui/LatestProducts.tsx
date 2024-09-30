@@ -25,15 +25,6 @@ const LatestProducts: React.FC = () => {
 
   // console.log("line 26: productsData: ", productsData);
 
-  // // Debounced fetch function
-  // const debouncedFetch = debounce(() => {
-  //   // Trigger re-fetch here if needed
-  // }, 300); // Adjust debounce delay as needed
-
-  // useEffect(() => {
-  //   debouncedFetch();
-  // }, [debouncedFetch]);
-
   // Function to get the latest 8 products
   const getLatestProducts = (
     products: TProductWithDate[],

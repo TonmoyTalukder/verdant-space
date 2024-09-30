@@ -1,4 +1,8 @@
-import { HeartOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  HeartOutlined,
+  ShoppingCartOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { Badge, Button, ConfigProvider, Modal } from "antd";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -68,65 +72,88 @@ const ResponsiveCart = () => {
       }}
     >
       <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                defaultBg: "#21390e",
-                defaultActiveBg: "#21390e",
-                defaultHoverBg: "#21390e",
-                defaultHoverBorderColor: "#21390e",
-                defaultHoverColor: "#deb306",
-                defaultBorderColor: "#21390e",
-                defaultColor: "#fff",
-                defaultActiveBorderColor: "#21390e",
-                defaultActiveColor: "#fff",
-              },
+        theme={{
+          components: {
+            Button: {
+              defaultBg: "#21390e",
+              defaultActiveBg: "#21390e",
+              defaultHoverBg: "#21390e",
+              defaultHoverBorderColor: "#21390e",
+              defaultHoverColor: "#deb306",
+              defaultBorderColor: "#21390e",
+              defaultColor: "#fff",
+              defaultActiveBorderColor: "#21390e",
+              defaultActiveColor: "#fff",
             },
-          }}
-        >
-          <Button style={{marginRight: '5%'}} onClick={handleProceedToCheckout} icon={<UserOutlined />} />
-          <Button style={{marginRight: '5%'}} onClick={handleWishlist} icon={<HeartOutlined />} />
-          <WishlistDrawer
-            wishlistOpen={wishlistOpen}
-            setWishlistOpen={setWishlistOpen}
-          />
-        </ConfigProvider>
-        <ConfigProvider
-          theme={{
-            components: {
-              Button: {
-                defaultBg: "#628753",
-                defaultActiveBg: "#628753",
-                defaultHoverBg: "#628753",
-                defaultHoverBorderColor: "#628753",
-                defaultHoverColor: "#deb306",
-                defaultBorderColor: "#628753",
-                defaultColor: "#fff",
-                defaultActiveBorderColor: "#628753",
-                defaultActiveColor: "#fff",
-              },
+          },
+        }}
+      >
+        <Button
+          style={{ marginRight: "5%" }}
+          onClick={handleProceedToCheckout}
+          icon={<UserOutlined />}
+        />
+        <Button
+          style={{ marginRight: "5%" }}
+          onClick={handleWishlist}
+          icon={<HeartOutlined />}
+        />
+        <WishlistDrawer
+          wishlistOpen={wishlistOpen}
+          setWishlistOpen={setWishlistOpen}
+        />
+      </ConfigProvider>
+      <ConfigProvider
+        theme={{
+          components: {
+            Button: {
+              defaultBg: "#628753",
+              defaultActiveBg: "#628753",
+              defaultHoverBg: "#628753",
+              defaultHoverBorderColor: "#628753",
+              defaultHoverColor: "#deb306",
+              defaultBorderColor: "#628753",
+              defaultColor: "#fff",
+              defaultActiveBorderColor: "#628753",
+              defaultActiveColor: "#fff",
             },
-          }}
-        >
-          <Badge count={totalQuantity} showZero>
-            <Button icon={<ShoppingCartOutlined />} onClick={showCartModal} />
-          </Badge>
-        </ConfigProvider>
+          },
+        }}
+      >
+        <Badge count={totalQuantity} showZero>
+          <Button icon={<ShoppingCartOutlined />} onClick={showCartModal} />
+        </Badge>
+      </ConfigProvider>
 
-        <Modal
-          title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update Cart" 
-          visible={isCartModalOpen}
-          onCancel={() => setIsCartModalOpen(false)}
-          footer={null}
-          width="100vw"
-          style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', overflowY: "scroll", overflowX: 'scroll' }} 
-          bodyStyle={{ display: 'flex', justifyContent: 'center', alignContent: 'center', maxHeight: "60vh", width: '100vw', overflowY: "scroll", overflowX: 'scroll' }} // Ensure modal content scrolls if necessary
-        >
-          <div style={{ minHeight: "25vh" }}>
-            <CartInfo 
-            />
-          </div>
-        </Modal>
+      <Modal
+        title="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Update Cart"
+        open={isCartModalOpen}
+        onCancel={() => setIsCartModalOpen(false)}
+        footer={null}
+        width="100vw"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignContent: "center",
+          overflowY: "scroll",
+          overflowX: "scroll",
+        }}
+        styles={{
+          body: {
+            display: "flex",
+            justifyContent: "center",
+            alignContent: "center",
+            maxHeight: "60vh",
+            width: "100vw",
+            overflowY: "scroll",
+            overflowX: "scroll",
+          },
+        }}
+      >
+        <div style={{ minHeight: "25vh" }}>
+          <CartInfo />
+        </div>
+      </Modal>
     </div>
   );
 };

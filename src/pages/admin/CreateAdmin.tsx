@@ -233,7 +233,7 @@ const CreateAdmin = () => {
       {/* Update User Modal */}
       <Modal
         title="Update User"
-        visible={isModalOpen}
+        open={isModalOpen}
         footer={null}
         onCancel={() => setIsModalOpen(false)}
       >

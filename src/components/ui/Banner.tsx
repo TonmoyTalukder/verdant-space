@@ -268,7 +268,7 @@ const Banner = () => {
             className="custom-select"
           >
             <Option value="All">All Categories</Option>
-            <Option value="Fruit">Fruit</Option>
+            <Option value="Fruits">Fruits</Option>
             <Option value="Flower">Flower</Option>
             <Option value="Home Decor Plant">Home Decor Plant</Option>
             <Option value="Wood Plant">Wood Plant</Option>
@@ -496,7 +496,7 @@ const Banner = () => {
         </ConfigProvider>
         <Modal
           title="Update Cart"
-          visible={isCartModalOpen}
+          open={isCartModalOpen}
           onCancel={() => setIsCartModalOpen(false)}
           footer={null}
           width="38vw"
@@ -507,15 +507,17 @@ const Banner = () => {
             overflowY: "auto",
             overflowX: "hidden",
           }}
-          bodyStyle={{
-            display: "flex",
-            justifyContent: "center",
-            alignContent: "center",
-            maxHeight: "60vh",
-            width: "35vw",
-            overflowY: "auto",
-            overflowX: "hidden",
-          }} // Ensure modal content scrolls if necessary
+          styles={{
+            body: {
+              display: "flex",
+              justifyContent: "center",
+              alignContent: "center",
+              maxHeight: "60vh",
+              width: "35vw",
+              overflowY: "auto",
+              overflowX: "hidden",
+            },
+          }} // Use styles.body for body styling
         >
           <div style={{ minHeight: "25vh" }}>
             <CartInfo />

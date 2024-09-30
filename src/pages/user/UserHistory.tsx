@@ -269,7 +269,7 @@ const UserHistory = () => {
 
       <Modal
         title="Proceed with Payment?"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handlePaymentProceed}
         onCancel={handleModalClose}
       >
@@ -285,7 +285,7 @@ const UserHistory = () => {
 
       <Modal
         title="Update Order"
-        visible={isUpdateModalVisible}
+        open={isUpdateModalVisible}
         onOk={() => form.submit()}
         onCancel={handleUpdateModalClose}
       >

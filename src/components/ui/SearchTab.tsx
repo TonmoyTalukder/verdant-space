@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined, SearchOutlined } from "@ant-design/icons";
 import { Input, Button, Row, Col, Rate } from "antd";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import "./SearchTab.css";
 import { useSearchProductsQuery } from "../../redux/features/products/productsApi";
 import { debounce } from "lodash";
@@ -24,12 +24,14 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
   const navigate = useNavigate();
 
   // Fetch search results from the API
-  const { data: searchResults } = useSearchProductsQuery({
-    searchTerm: debouncedSearchQuery,
-  },
-  {
-    skip: !debouncedSearchQuery, // Skip query if searchQuery is empty
-  },);
+  const { data: searchResults } = useSearchProductsQuery(
+    {
+      searchTerm: debouncedSearchQuery,
+    },
+    {
+      skip: !debouncedSearchQuery, // Skip query if searchQuery is empty
+    },
+  );
 
   // Debounced function to set the search query
   const debouncedSearch = useRef(
@@ -61,7 +63,8 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
   }, [setShowSearchTab]);
 
   // Update suggestions based on search results
-  const updateSuggestions = () => {
+  // Define updateSuggestions function with useCallback
+  const updateSuggestions = useCallback(() => {
     if (
       searchResults &&
       searchResults.data &&
@@ -72,19 +75,17 @@ const SearchTab = ({ setShowSearchTab }: SearchTabProps) => {
         (item: TProduct) => item.name,
       );
 
-      if (validItems.length > 0) {
-        setSuggestions(validItems);
-      } else {
-        setSuggestions([]); // Clear suggestions if no valid items
-      }
+      // Update suggestions
+      setSuggestions(validItems.length > 0 ? validItems : []);
     } else {
       setSuggestions([]); // Clear suggestions if no results
     }
-  };
+  }, [searchResults]);
 
+  // Use useEffect to call updateSuggestions
   useEffect(() => {
     updateSuggestions();
-  });
+  }, [updateSuggestions]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

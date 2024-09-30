@@ -451,7 +451,7 @@ const UserDashboard = () => {
 
       <Modal
         title="Proceed with Payment?"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handlePaymentProceed}
         onCancel={handleModalCancel}
       >
